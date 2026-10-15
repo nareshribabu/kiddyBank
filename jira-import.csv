@@ -1,0 +1,43 @@
+Issue Id,Issue Type,Summary,Description,Parent Id
+1,Epic,M0 Wireframe approval gate,"Static clay-styled HTML wireframe approved before any app code.",
+2,Epic,M1 Scaffold and design system,"Vite, React, TS, Tailwind, design tokens, base components, deploy.",
+3,Epic,M2 Supabase and parent auth,"Supabase project, schema, row-level security, parent signup and login, parent PIN.",
+4,Epic,M3 Kid profiles and login,"Kid profiles with avatar and PIN, profile picker, kid-only routing.",
+5,Epic,M4 Device linking,"One-time code or QR links a kid's own device; parent can revoke.",
+6,Epic,M5 Ledger,"Integer ledger; parent awards or deducts with a reason; kid sees balance and history.",
+7,Epic,M6 Shop,"Parent manages prizes; kid browses by category.",
+8,Epic,M7 Purchases,"Kid buys prizes with overspend protection; parent fulfils.",
+9,Epic,M8 Savings goals,"Kid saves toward a prize in a jar with a progress bar.",
+10,Epic,M9 Loans,"Loan requests, approval, weekly simple interest, repayment.",
+11,Epic,M10 Parent dashboard,"Per-child metrics, detail view, approvals inbox.",
+12,Epic,M11 Conversation prompts lessons and polish,"Parent prompt cards, mini-lessons, animations, empty and error states.",
+13,Epic,M12 Hardening,"Keep-alive, export, security audit, accessibility, final deploy.",
+101,Story,Build wireframe of kid and parent screens,"One static HTML file in clay style showing kid home, kid shop, kid loans, parent dashboard, child detail. Acceptance: file opens in a browser and shows all five screens.",1
+102,Story,Review wireframe and sign-off,"Owner reviews, requests changes, approves. Acceptance: written approval recorded; gate for M1.",1
+103,Story,Project setup tooling and design tokens,"Vite, React, TS, Tailwind, Motion, Vitest; lint, typecheck and test scripts; tokens file for colors, shadows, radii, font. Acceptance: dev, build, test, lint all run clean.",2
+104,Story,Base clay components and showcase page,"ClayCard, ClayButton, ClayInput, ProgressBar, Tag, Avatar, Modal plus showcase page. Acceptance: showcase renders at desktop and narrow widths.",2
+105,Story,Deploy to Cloudflare Pages and update CLAUDE.md,"Connect repo, deploy on push, replace planned commands in CLAUDE.md with real ones. Acceptance: showcase live at public URL.",2
+106,Story,Schema and row-level security,"Tables for families, parents, kid profiles with RLS by family. Acceptance: a second family account cannot read the first family's data.",3
+107,Story,Parent signup login and PIN gate,"Email and password auth, protected routes, parent PIN to enter parent view. Acceptance: sign up, log in, and PIN gate work.",3
+108,Story,Kid profile CRUD,"Create, edit, delete kid profile with name, avatar, PIN. Acceptance: profiles persist and only the owning family sees them.",4
+109,Story,Profile picker PIN entry and kid-only routing,"Avatar picker, PIN entry with attempt limit and lockout, kid routes only. Acceptance: kid session cannot reach parent routes or data.",4
+110,Story,Link code generation and exchange,"Edge functions: one-time code (about 10 min, single use) and exchange for kid-scoped session. Acceptance: code works once and expires.",5
+111,Story,Link screens device list and revoke,"Parent shows code and QR, kid enters code, parent sees linked devices and revokes. Optional per-kid PIN lock. Acceptance: revoked device loses access.",5
+112,Story,Ledger schema balance logic and tests,"Integer ledger table, balance function, RLS (kids read only). Acceptance: unit tests pass; balance equals ledger sum; kid cannot write.",6
+113,Story,Parent award and deduct and kid balance and history,"Parent form with required reason; kid sees balance and history. Acceptance: award appears in kid history and updates balance.",6
+114,Story,Parent prize CRUD,"Add, edit, remove prizes with name, price, category, image. Acceptance: changes persist.",7
+115,Story,Kid shop browse and filter,"Browse prizes with category filter and detail view. Acceptance: parent changes appear for the kid.",7
+116,Story,Atomic buy with overspend protection,"Purchase and ledger entry in one transaction. Acceptance: insufficient balance is blocked; concurrent buys cannot overdraw.",8
+117,Story,Parent fulfil queue,"Parent sees pending purchases and marks fulfilled. Acceptance: status updates and shows in kid history.",8
+118,Story,Goals and jar logic with tests,"Schema and logic for goals and jar balance. Acceptance: unit tests pass; jar reconciles with ledger.",9
+119,Story,Goal and jar UI and goal reached,"Pick prize goal, move bucks in and out, progress bar, goal reached state. Acceptance: reaching target unlocks buying.",9
+120,Story,Loan rules request and approve or deny,"Parent sets rate and limit; kid requests; parent approves or denies. Acceptance: approved loan credits the kid's balance.",10
+121,Story,Interest calculation and weekly accrual job,"Simple weekly interest on principal via scheduled job. Acceptance: unit tests pass; job accrues on schedule.",10
+122,Story,Active loans view and repayment,"Kid sees owed, rate, next interest; repays; loan closes at zero. Acceptance: repayment clears the loan.",10
+123,Story,Child summary cards and detail view,"Card per child (balance, savings, loan owed) with drill-down and activity timeline. Acceptance: multi-kid numbers correct.",11
+124,Story,Pending approvals inbox,"Loans and purchases awaiting parent action in one list. Acceptance: acting on an item removes it.",11
+125,Story,Conversation prompts and mini-lessons,"Event-based prompt cards for parents; lessons on first borrow and first save. Acceptance: prompts fire on the right events.",12
+126,Story,Animations and empty and error states,"Squish buttons, balance count-up, goal confetti, empty and error states. Acceptance: each state is reachable and looks right.",12
+127,Story,Keep-alive ping and export script,"Daily GitHub Actions ping to Supabase; data export script. Acceptance: ping runs daily; export produces a full backup.",13
+128,Story,Security audit and accessibility pass,"Two-family RLS test across all tables; keyboard, contrast and label checks. Acceptance: no cross-family access; checks pass.",13
+129,Story,Final deploy and smoke test,"Production deploy and end-to-end walkthrough. Acceptance: all milestones' verify steps pass on the live site.",13
