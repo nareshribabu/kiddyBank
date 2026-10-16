@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiddy Bank Wireframe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Design tokens: colors, shadows, radii live here only. */
+:root {
+  --bg: #f4f6fc;
+  --card: #ffffff;
+  --ink: #2b2d4a;
+  --ink-soft: #6b6f8e;
+
+  --lavender: #8b7cf6;
+  --lavender-soft: #e9e5ff;
+  --mint: #4cc9a0;
+  --mint-soft: #d9f5ea;
+  --peach-soft: #ffe6d6;
+  --coral: #ff7a6b;
+  --sky-soft: #dcefff;
+  --yellow-soft: #fff4c7;
+
+  --radius-card: 28px;
+  --radius-tile: 20px;
+  --radius-pill: 999px;
+
+  --shadow-card:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.9),
+    inset -3px -3px 6px rgba(139, 124, 246, 0.08),
+    0 12px 28px rgba(110, 120, 180, 0.16);
+  --shadow-press:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.7),
+    inset -3px -3px 6px rgba(0, 0, 0, 0.08),
+    0 8px 18px rgba(139, 124, 246, 0.35);
+}
+
+* { box-sizing: border-box; margin: 0; }
+body {
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* Shared pieces */
+.card {
+  background: var(--card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+}
+.pill {
+  display: inline-block;
+  border-radius: var(--radius-pill);
+  background: var(--lavender);
+  color: #fff;
+  box-shadow: var(--shadow-press);
+  padding: 12px 22px;
+  font-weight: 600;
+  font-size: 16px;
+}
+.tile {
+  width: 56px; height: 56px;
+  border-radius: var(--radius-tile);
+  display: grid; place-items: center;
+  flex: none;
+}
+.tile img { width: 38px; height: 38px; }
+.progress {
+  height: 14px;
+  border-radius: var(--radius-pill);
+  background: var(--mint-soft);
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+.progress > span {
+  display: block; height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--mint);
+}
+.arrow {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--lavender);
+  box-shadow: var(--shadow-press);
+  display: grid; place-items: center;
+  flex: none;
+}
+.arrow::after {
+  content: ""; width: 9px; height: 9px;
+  border-top: 3px solid #fff; border-right: 3px solid #fff;
+  transform: rotate(45deg); margin-left: -3px;
+}
+.row { display: flex; align-items: center; gap: 14px; }
+.row .grow { flex: 1; min-width: 0; }
+.title { font-weight: 600; font-size: 17px; }
+.sub { color: var(--ink-soft); font-size: 14px; }
+h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 700; line-height: 1.15; }
+h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
+
+/* Kid layout: fluid, full width, phone first */
+.app { min-height: 100vh; padding: 16px 16px 110px; }
+.wrap { max-width: 1440px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; color: var(--ink); text-decoration: none; }
+.brand img { width: 48px; height: 48px; }
+.account { display: flex; align-items: center; gap: 12px; justify-self: end; }
+.who { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 18px; }
+.brand span, .who span { display: none; }
+.avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--peach-soft); box-shadow: var(--shadow-card); }
+.avatar img { width: 100%; height: 100%; }
+.coins { display: flex; align-items: center; gap: 8px; padding: 6px 16px 6px 8px; background: var(--card); border-radius: var(--radius-pill); box-shadow: var(--shadow-card); font-weight: 700; }
+.coins img { width: 32px; height: 32px; }
+
+.tabbar {
+  position: fixed; bottom: 12px; left: 12px; right: 12px;
+  display: flex; justify-content: space-around;
+  background: var(--card); border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-card); padding: 10px 8px; z-index: 10;
+}
+.tab { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 64px; padding: 6px 12px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; color: var(--ink-soft); }
+.tab i { width: 22px; height: 22px; border-radius: 8px; background: currentColor; opacity: 0.45; }
+.tab.active { color: var(--lavender); background: var(--lavender-soft); }
+.tab.active i { opacity: 1; }
+
+.content { display: grid; grid-template-columns: 1fr; gap: 18px; }
+.hero { background: var(--lavender-soft); display: flex; align-items: center; justify-content: space-between; gap: 12px; overflow: hidden; }
+.hero .pill { margin-top: 16px; }
+.hero img { width: clamp(130px, 24vw, 280px); flex: none; margin: -24px 0; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.stat { text-align: center; padding: 16px 8px; }
+.stat b { display: block; font-size: clamp(24px, 3.4vw, 34px); }
+.stat span { font-size: 14px; color: var(--ink-soft); }
+.goal img.prize { width: 72px; height: 72px; }
+.list { display: flex; flex-direction: column; gap: 16px; }
+
+.shelf-head { display: flex; align-items: baseline; justify-content: space-between; }
+.shelf-head h2 { margin-bottom: 14px; }
+.see-all { color: var(--lavender); font-weight: 600; text-decoration: none; }
+.prizes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.prize-card { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; }
+.tile.big { width: 100%; height: 110px; margin-bottom: 6px; }
+.tile.big img { width: 72px; height: 72px; }
+.price { color: var(--ink-soft); font-size: 15px; }
+.tag { border-radius: var(--radius-pill); padding: 6px 12px; font-size: 13px; font-weight: 600; margin-top: 4px; }
+
+@media (min-width: 520px) {
+  .brand span, .who span { display: inline; }
+}
+
+/* Wide screens: top navigation, two-column content */
+@media (min-width: 800px) {
+  .app { padding: 28px 40px 40px; }
+  .topbar { display: grid; grid-template-columns: 1fr auto 1fr; }
+  .tabbar { position: static; padding: 6px; }
+  .tab { flex-direction: row; gap: 8px; font-size: 15px; padding: 10px 18px; }
+  .tab i { width: 18px; height: 18px; }
+  .content { grid-template-columns: 1.1fr 1fr; gap: 24px; }
+  .hero, .stats, .shelf { grid-column: 1 / -1; }
+  .prizes { grid-template-columns: repeat(4, 1fr); }
+  .hero { padding: 32px 40px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Screen 1: Kid home -->
+<div class="app" id="kid-home">
+  <div class="wrap">
+    <header class="topbar">
+      <a class="brand" href="#">
+        <img src="assets/piggy_head.png" alt="">
+        <span>Kiddy Bank</span>
+      </a>
+      <nav class="tabbar" aria-label="Main">
+        <a class="tab active" href="#" aria-current="page"><i></i>Home</a>
+        <a class="tab" href="#"><i></i>Savings</a>
+        <a class="tab" href="#"><i></i>Loans</a>
+        <a class="tab" href="#"><i></i>Shop</a>
+      </nav>
+      <div class="account">
+        <div class="coins"><img src="assets/coin.png" alt="">120</div>
+        <div class="who">
+          <span>Theo</span>
+          <div class="avatar"><img src="assets/kid-boy.png" alt=""></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="card hero">
+        <div>
+          <h1>Welcome back, Theo!</h1>
+          <span class="pill">Browse the shop</span>
+        </div>
+        <img src="assets/piggy_happy_coins.png" alt="Happy piggy bank with coins">
+      </section>
+
+      <section class="stats">
+        <div class="card stat"><b>120</b><span>Balance</span></div>
+        <div class="card stat"><b>45</b><span>Saved</span></div>
+        <div class="card stat"><b>20</b><span>Owed</span></div>
+      </section>
+
+      <section class="card goal">
+        <h2>My next prize</h2>
+        <div class="row">
+          <img class="prize" src="assets/prize-rocket.png" alt="">
+          <div class="grow">
+            <div class="title">Toy Rocket</div>
+            <div class="sub">45 of 90 bucks</div>
+          </div>
+        </div>
+        <div class="progress" style="margin-top:16px"><span style="width:50%"></span></div>
+      </section>
+
+      <section class="card">
+        <h2>Recent</h2>
+        <div class="list">
+          <div class="row">
+            <div class="tile" style="background:var(--mint-soft)"><img src="assets/star.png" alt=""></div>
+            <div class="grow"><div class="title">Cleaned my room</div><div class="sub">+10 bucks, today</div></div>
+            <div class="arrow"></div>
+          </div>
+          <div class="row">
+            <div class="tile" style="background:var(--yellow-soft)"><img src="assets/trophy.png" alt=""></div>
+            <div class="grow"><div class="title">Reading streak bonus</div><div class="sub">+5 bucks, yesterday</div></div>
+            <div class="arrow"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="shelf">
+        <div class="shelf-head">
+          <h2>Prizes for you</h2>
+          <a class="see-all" href="#">See all</a>
+        </div>
+        <div class="prizes">
+          <div class="card prize-card">
+            <div class="tile big" style="background:var(--peach-soft)"><img src="assets/prize-teddy.png" alt=""></div>
+            <div class="title">Teddy Bear</div>
+            <div class="price">60 bucks</div>
+            <span class="tag" style="background:var(--mint-soft)">You can get it</span>
+          </div>
+          <div class="card prize-card">
+            <div class="tile big" style="background:var(--sky-soft)"><img src="assets/prize-ball.png" alt=""></div>
+            <div class="title">Soccer Ball</div>
+            <div class="price">80 bucks</div>
+            <span class="tag" style="background:var(--mint-soft)">You can get it</span>
+          </div>
+          <div class="card prize-card">
+            <div class="tile big" style="background:var(--lavender-soft)"><img src="assets/prize-game.png" alt=""></div>
+            <div class="title">Game Controller</div>
+            <div class="price">150 bucks</div>
+            <span class="tag" style="background:var(--yellow-soft)">30 more to go</span>
+          </div>
+          <div class="card prize-card">
+            <div class="tile big" style="background:var(--mint-soft)"><img src="assets/prize-books.png" alt=""></div>
+            <div class="title">Story Books</div>
+            <div class="price">40 bucks</div>
+            <span class="tag" style="background:var(--mint-soft)">You can get it</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+</body>
+</html>
