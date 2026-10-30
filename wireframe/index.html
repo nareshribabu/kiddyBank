@@ -54,6 +54,7 @@ body {
 }
 .pill {
   display: inline-block;
+  text-decoration: none;
   border-radius: var(--radius-pill);
   background: var(--lavender);
   color: #fff;
@@ -148,6 +149,25 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
 .price { color: var(--ink-soft); font-size: 15px; }
 .tag { border-radius: var(--radius-pill); padding: 6px 12px; font-size: 13px; font-weight: 600; margin-top: 4px; }
 
+/* Shop */
+[hidden] { display: none !important; }
+.shop-hero { padding: 20px 24px; }
+.shop-hero img { width: clamp(90px, 14vw, 150px); margin: -10px 0; }
+.shop-hero .sub { font-size: 16px; margin-top: 8px; }
+.filters { display: flex; gap: 10px; overflow-x: auto; padding: 6px 4px 14px; margin: 0 -4px; }
+.chip { flex: none; text-decoration: none; padding: 10px 20px; border-radius: var(--radius-pill); background: var(--card); box-shadow: var(--shadow-card); color: var(--ink-soft); font-weight: 600; }
+.chip.active { background: var(--lavender); color: #fff; box-shadow: var(--shadow-press); }
+.shop-grid .tile.big { height: 140px; }
+.shop-grid .tile.big img { width: 88px; height: 88px; }
+.price { display: flex; align-items: center; gap: 6px; color: var(--ink); font-weight: 700; font-size: 18px; }
+.price img { width: 24px; height: 24px; }
+.btn { display: block; width: 100%; margin-top: auto; text-align: center; text-decoration: none; padding: 12px 18px; border-radius: var(--radius-pill); background: var(--lavender); color: #fff; font-weight: 600; box-shadow: var(--shadow-press); }
+.btn.ghost { background: var(--lavender-soft); color: #4a3fb0; box-shadow: var(--shadow-card); }
+.progress.slim { width: 100%; height: 10px; }
+.prize-card .tag { margin-top: 0; }
+.prize-card { gap: 8px; }
+.prize-card .btn { margin-top: auto; }
+
 @media (min-width: 520px) {
   .brand span, .who span { display: inline; }
 }
@@ -162,7 +182,10 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
   .content { grid-template-columns: 1.1fr 1fr; gap: 24px; }
   .hero, .stats, .shelf { grid-column: 1 / -1; }
   .prizes { grid-template-columns: repeat(4, 1fr); }
+  .shop-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .content.shop > * { grid-column: 1 / -1; }
   .hero { padding: 32px 40px; }
+  .shop-hero { padding: 24px 40px; }
 }
 </style>
 </head>
@@ -172,15 +195,15 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
 <div class="app" id="kid-home">
   <div class="wrap">
     <header class="topbar">
-      <a class="brand" href="#">
+      <a class="brand" href="#home">
         <img src="assets/piggy_head.png" alt="">
         <span>Kiddy Bank</span>
       </a>
       <nav class="tabbar" aria-label="Main">
-        <a class="tab active" href="#" aria-current="page"><i></i>Home</a>
-        <a class="tab" href="#"><i></i>Savings</a>
-        <a class="tab" href="#"><i></i>Loans</a>
-        <a class="tab" href="#"><i></i>Shop</a>
+        <a class="tab" href="#home"><i></i>Home</a>
+        <a class="tab" href="#savings"><i></i>Savings</a>
+        <a class="tab" href="#loans"><i></i>Loans</a>
+        <a class="tab" href="#shop"><i></i>Shop</a>
       </nav>
       <div class="account">
         <div class="coins"><img src="assets/coin.png" alt="">120</div>
@@ -191,11 +214,11 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
       </div>
     </header>
 
-    <main class="content">
+    <main class="content" data-screen="home">
       <section class="card hero">
         <div>
           <h1>Welcome back, Theo!</h1>
-          <span class="pill">Browse the shop</span>
+          <a class="pill" href="#shop">Browse the shop</a>
         </div>
         <img src="assets/piggy_happy_coins.png" alt="Happy piggy bank with coins">
       </section>
@@ -212,10 +235,10 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
           <img class="prize" src="assets/prize-rocket.png" alt="">
           <div class="grow">
             <div class="title">Toy Rocket</div>
-            <div class="sub">45 of 90 bucks</div>
+            <div class="sub">45 of 200 bucks</div>
           </div>
         </div>
-        <div class="progress" style="margin-top:16px"><span style="width:50%"></span></div>
+        <div class="progress" style="margin-top:16px"><span style="width:22.5%"></span></div>
       </section>
 
       <section class="card">
@@ -237,7 +260,7 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
       <section class="shelf">
         <div class="shelf-head">
           <h2>Prizes for you</h2>
-          <a class="see-all" href="#">See all</a>
+          <a class="see-all" href="#shop">See all</a>
         </div>
         <div class="prizes">
           <div class="card prize-card">
@@ -267,8 +290,90 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
         </div>
       </section>
     </main>
+
+    <!-- Screen 2: Kid shop -->
+    <main class="content shop" data-screen="shop" hidden>
+      <section class="card hero shop-hero">
+        <div>
+          <h1>Prize Shop</h1>
+          <p class="sub">You have 120 bucks. Pick something you love.</p>
+        </div>
+        <img src="assets/piggy_happy.png" alt="Happy piggy bank">
+      </section>
+
+      <div class="filters" role="group" aria-label="Categories">
+        <a class="chip active" href="#shop">All</a>
+        <a class="chip" href="#shop">Toys</a>
+        <a class="chip" href="#shop">Games</a>
+        <a class="chip" href="#shop">Sports</a>
+        <a class="chip" href="#shop">Books</a>
+        <a class="chip" href="#shop">Surprises</a>
+      </div>
+
+      <section class="prizes shop-grid">
+        <div class="card prize-card">
+          <div class="tile big" style="background:var(--peach-soft)"><img src="assets/prize-teddy.png" alt=""></div>
+          <div class="title">Teddy Bear</div>
+          <div class="price"><img src="assets/coin.png" alt="">60</div>
+          <a class="btn" href="#shop">Get it</a>
+        </div>
+        <div class="card prize-card">
+          <div class="tile big" style="background:var(--lavender-soft)"><img src="assets/prize-rocket.png" alt=""></div>
+          <div class="title">Toy Rocket</div>
+          <div class="price"><img src="assets/coin.png" alt="">200</div>
+          <span class="tag" style="background:var(--yellow-soft)">My goal</span>
+          <div class="progress slim"><span style="width:22.5%"></span></div>
+          <div class="sub">45 of 200 saved</div>
+          <a class="btn ghost" href="#shop">Save up</a>
+        </div>
+        <div class="card prize-card">
+          <div class="tile big" style="background:var(--sky-soft)"><img src="assets/prize-ball.png" alt=""></div>
+          <div class="title">Soccer Ball</div>
+          <div class="price"><img src="assets/coin.png" alt="">80</div>
+          <a class="btn" href="#shop">Get it</a>
+        </div>
+        <div class="card prize-card">
+          <div class="tile big" style="background:var(--mint-soft)"><img src="assets/prize-books.png" alt=""></div>
+          <div class="title">Story Books</div>
+          <div class="price"><img src="assets/coin.png" alt="">40</div>
+          <a class="btn" href="#shop">Get it</a>
+        </div>
+        <div class="card prize-card">
+          <div class="tile big" style="background:var(--yellow-soft)"><img src="assets/prize-gift.png" alt=""></div>
+          <div class="title">Mystery Gift</div>
+          <div class="price"><img src="assets/coin.png" alt="">30</div>
+          <a class="btn" href="#shop">Get it</a>
+        </div>
+        <div class="card prize-card">
+          <div class="tile big" style="background:var(--lavender-soft)"><img src="assets/prize-game.png" alt=""></div>
+          <div class="title">Game Controller</div>
+          <div class="price"><img src="assets/coin.png" alt="">150</div>
+          <div class="sub">30 more to go</div>
+          <a class="btn ghost" href="#shop">Save up</a>
+        </div>
+      </section>
+    </main>
   </div>
 </div>
 
+<script>
+/* Show the screen named by the URL hash; default to home. */
+const screens = [...document.querySelectorAll("[data-screen]")];
+const tabs = [...document.querySelectorAll(".tab")];
+
+function show() {
+  const name = location.hash.slice(1);
+  const current = screens.some(s => s.dataset.screen === name) ? name : "home";
+  screens.forEach(s => { s.hidden = s.dataset.screen !== current; });
+  tabs.forEach(t => {
+    const on = t.getAttribute("href") === "#" + current;
+    t.classList.toggle("active", on);
+    on ? t.setAttribute("aria-current", "page") : t.removeAttribute("aria-current");
+  });
+  window.scrollTo(0, 0);
+}
+addEventListener("hashchange", show);
+show();
+</script>
 </body>
 </html>
