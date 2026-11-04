@@ -9,7 +9,7 @@ Status: plan approved. Implementation starts after the Jira setup is complete (e
 - Stack: Vite, React, TypeScript, Tailwind CSS, Motion (animation), Supabase (Postgres, auth, row-level security, edge functions, scheduled jobs).
 - Hosting: Cloudflare Pages (frontend), Supabase free tier (backend). Cost: 0.
 - Currency: purely virtual "kiddy bucks", stored as integers in a ledger. Balance is derived from transactions.
-- Loan interest: simple weekly interest on the original principal, rate set by the parent.
+- Loan interest: simple weekly interest on the remaining principal (as real loans do), rate set by the parent. Charged at the end of each week on the principal still owed, rounded to whole bucks with normal rounding (half rounds up, so 1.5 becomes 2). Payments cover interest owed first, then reduce principal. Interest stops when principal reaches 0.
 - Login:
   - Parent signs up with email and password.
   - Shared device: kid taps avatar and enters PIN; parent view also needs a parent PIN.
@@ -49,7 +49,7 @@ Extras in MVP: conversation prompt cards for parents ("Maya borrowed 20 bucks, a
 12. Hardening: keep-alive ping, export script, accessibility pass, final deploy.
 
 ## Future iterations
-Recurring allowance and chore tracker; goal completion bonuses; streaks, badges, levels; needs vs wants quizzes and small games; spend/save/give split with a charity jar; kid credit score tied to repayments; compound interest visualizer; multiple guardians and relative gifts; notifications; optional real-dollar equivalent; passkeys or kid email; family code login; the separate mobile app (Expo or similar) on the same Supabase backend.
+Weekly loan due day: kids must make a loan payment by a set day each week; loan history table for each active loan (week by week: interest charged, payments, principal left) so kids see how a loan works; recurring allowance and chore tracker; goal completion bonuses; streaks, badges, levels; needs vs wants quizzes and small games; spend/save/give split with a charity jar; kid credit score tied to repayments; compound interest visualizer; multiple guardians and relative gifts; notifications; optional real-dollar equivalent; passkeys or kid email; family code login; the separate mobile app (Expo or similar) on the same Supabase backend.
 
 ## Testing
 Vitest for ledger and interest logic. Manual walkthrough of each milestone's verify step. Test row-level security explicitly with a second family account.

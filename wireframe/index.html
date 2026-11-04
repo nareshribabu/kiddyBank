@@ -162,11 +162,44 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
 .price { display: flex; align-items: center; gap: 6px; color: var(--ink); font-weight: 700; font-size: 18px; }
 .price img { width: 24px; height: 24px; }
 .btn { display: block; width: 100%; margin-top: auto; text-align: center; text-decoration: none; padding: 12px 18px; border-radius: var(--radius-pill); background: var(--lavender); color: #fff; font-weight: 600; box-shadow: var(--shadow-press); }
-.btn.ghost { background: var(--lavender-soft); color: #4a3fb0; box-shadow: var(--shadow-card); }
 .progress.slim { width: 100%; height: 10px; }
 .prize-card .tag { margin-top: 0; }
 .prize-card { gap: 8px; }
 .prize-card .btn { margin-top: auto; }
+
+/* Loans */
+.figures { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0; }
+.figure { background: var(--bg); border-radius: var(--radius-tile); padding: 12px 6px; text-align: center; }
+.figure b { display: block; font-size: 24px; }
+.figure span { font-size: 13px; color: var(--ink-soft); }
+.figure.owe { background: var(--peach-soft); }
+.loan-grid { display: grid; gap: 16px; }
+.loan-card .row { align-items: flex-start; }
+.loan-card { display: flex; flex-direction: column; gap: 12px; }
+.loan-card .tag { margin-top: 0; align-self: flex-start; }
+.tag.rate { background: var(--lavender-soft); color: #4a3fb0; }
+.loan-card .figures { margin: 0; }
+.paid { display: flex; justify-content: space-between; font-size: 14px; color: var(--ink-soft); }
+.paid b { color: var(--ink); }
+.see-more { margin-top: 16px; border: 0; font: inherit; font-weight: 600; cursor: pointer; }
+.note p { margin-bottom: 12px; }
+.loan-top { display: grid; gap: 18px; }
+.owed { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 4px; }
+.owed img { width: 64px; height: 64px; margin-bottom: 6px; }
+.owed b { font-size: 52px; line-height: 1; }
+.owed span { font-weight: 600; font-size: 18px; }
+.loan-card .btn { margin-top: 0; }
+.note { background: var(--sky-soft); }
+.note p { font-size: 16px; line-height: 1.5; }
+.chart { display: flex; align-items: flex-end; gap: 12px; margin: 8px 0 14px; }
+.bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; font-weight: 700; }
+.bar small { font-weight: 500; font-size: 13px; color: var(--ink-soft); }
+.bar i { display: flex; flex-direction: column; width: 100%; max-width: 64px; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-card); }
+.bar .interest { background: var(--coral); }
+.bar .base { height: 80px; background: var(--lavender); }
+.legend { display: flex; gap: 16px; font-size: 14px; margin-bottom: 12px; }
+.legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; background: var(--lavender); }
+.legend span.interest::before { background: var(--coral); }
 
 @media (min-width: 520px) {
   .brand span, .who span { display: inline; }
@@ -184,6 +217,10 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
   .prizes { grid-template-columns: repeat(4, 1fr); }
   .shop-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
   .content.shop > * { grid-column: 1 / -1; }
+  .loans-active, .loan-top { grid-column: 1 / -1; }
+  .loan-top { grid-template-columns: 1fr 2fr; gap: 24px; }
+  .note { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 28px 40px; }
+  .loan-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
   .hero { padding: 32px 40px; }
   .shop-hero { padding: 24px 40px; }
 }
@@ -226,7 +263,7 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
       <section class="stats">
         <div class="card stat"><b>120</b><span>Balance</span></div>
         <div class="card stat"><b>45</b><span>Saved</span></div>
-        <div class="card stat"><b>20</b><span>Owed</span></div>
+        <div class="card stat"><b>44</b><span>Owed</span></div>
       </section>
 
       <section class="card goal">
@@ -324,7 +361,7 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
           <span class="tag" style="background:var(--yellow-soft)">My goal</span>
           <div class="progress slim"><span style="width:22.5%"></span></div>
           <div class="sub">45 of 200 saved</div>
-          <a class="btn ghost" href="#shop">Add bucks</a>
+          <a class="btn" href="#shop">Add bucks</a>
         </div>
         <div class="card prize-card">
           <div class="tile big" style="background:var(--sky-soft)"><img src="assets/prize-ball.png" alt=""></div>
@@ -349,7 +386,122 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
           <div class="title">Game Controller</div>
           <div class="price"><img src="assets/coin.png" alt="">150</div>
           <div class="sub">30 more to go</div>
-          <a class="btn ghost" href="#shop">Save up</a>
+          <a class="btn" href="#shop">Save up</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- Screen 3: Kid loans -->
+    <main class="content loans" data-screen="loans" hidden>
+      <section class="card hero shop-hero">
+        <div>
+          <h1>My Loans</h1>
+          <a class="pill" href="#loans">Ask to borrow</a>
+        </div>
+        <img src="assets/piggy_logo.png" alt="Piggy bank with a coin dropping in">
+      </section>
+
+      <div class="loan-top">
+      <section class="card owed">
+        <img src="assets/coin.png" alt="">
+        <b>44</b>
+        <span>Total owed</span>
+        <p class="sub">Across 3 loans</p>
+      </section>
+      <section class="card note">
+        <div>
+          <h2>How loans work</h2>
+          <p>A grown-up sets the interest rate. At the end of each week you pay interest on what you still owe. At 10% a week, borrowing 10 bucks grows by 1 kiddy buck each week. Pay some back and the interest gets smaller.</p>
+          <div class="legend"><span>Borrowed</span><span class="interest">Interest</span></div>
+          <p><b>Pay back sooner, pay less interest.</b></p>
+        </div>
+        <div class="chart">
+          <div class="bar">10<i><span class="base"></span></i><small>Now</small></div>
+          <div class="bar">11<i><span class="interest" style="height:10px"></span><span class="base"></span></i><small>1 week</small></div>
+          <div class="bar">12<i><span class="interest" style="height:20px"></span><span class="base"></span></i><small>2 weeks</small></div>
+          <div class="bar">13<i><span class="interest" style="height:30px"></span><span class="base"></span></i><small>3 weeks</small></div>
+        </div>
+      </section>
+      </div>
+
+      <section class="loans-active">
+        <div class="shelf-head">
+          <h2>Active loans</h2>
+        </div>
+        <div class="loan-grid">
+          <div class="card loan-card">
+            <div class="row">
+              <div class="tile" style="background:var(--sky-soft)"><img src="assets/prize-ball.png" alt=""></div>
+              <div class="grow">
+                <div class="title">Soccer Ball</div>
+                <div class="sub">Borrowed 2 weeks ago</div>
+              </div>
+            </div>
+            <span class="tag rate">Interest: 10% a week. This week: 2 bucks</span>
+            <div class="figures">
+              <div class="figure"><b>20</b><span>Borrowed</span></div>
+              <div class="figure"><b>+4</b><span>Interest</span></div>
+              <div class="figure owe"><b>24</b><span>Total</span></div>
+            </div>
+            <div class="progress slim"><span style="width:16.7%"></span></div>
+            <div class="paid"><span>4 paid back</span><b>20 left to pay</b></div>
+            <a class="btn" href="#loans">Pay back</a>
+          </div>
+          <div class="card loan-card">
+            <div class="row">
+              <div class="tile" style="background:var(--peach-soft)"><img src="assets/prize-teddy.png" alt=""></div>
+              <div class="grow">
+                <div class="title">Teddy Bear</div>
+                <div class="sub">Borrowed 3 weeks ago</div>
+              </div>
+            </div>
+            <span class="tag rate">Interest: 10% a week. This week: 1 buck</span>
+            <div class="figures">
+              <div class="figure"><b>15</b><span>Borrowed</span></div>
+              <div class="figure"><b>+4</b><span>Interest</span></div>
+              <div class="figure owe"><b>19</b><span>Total</span></div>
+            </div>
+            <div class="progress slim"><span style="width:31.6%"></span></div>
+            <div class="paid"><span>6 paid back</span><b>13 left to pay</b></div>
+            <a class="btn" href="#loans">Pay back</a>
+          </div>
+          <div class="card loan-card more" hidden>
+            <div class="row">
+              <div class="tile" style="background:var(--yellow-soft)"><img src="assets/prize-gift.png" alt=""></div>
+              <div class="grow">
+                <div class="title">Mystery Gift</div>
+                <div class="sub">Borrowed 1 week ago</div>
+              </div>
+            </div>
+            <span class="tag rate">Interest: 10% a week. This week: 1 buck</span>
+            <div class="figures">
+              <div class="figure"><b>10</b><span>Borrowed</span></div>
+              <div class="figure"><b>+1</b><span>Interest</span></div>
+              <div class="figure owe"><b>11</b><span>Total</span></div>
+            </div>
+            <div class="progress slim"><span style="width:0%"></span></div>
+            <div class="paid"><span>0 paid back</span><b>11 left to pay</b></div>
+            <a class="btn" href="#loans">Pay back</a>
+          </div>
+        </div>
+        <button class="chip see-more" type="button" onclick="document.querySelectorAll('.loan-card.more').forEach(c => c.hidden = false); this.hidden = true;">See 1 more loan</button>
+      </section>
+
+      <section class="card">
+        <h2>Loan requests</h2>
+        <div class="row">
+          <div class="tile" style="background:var(--lavender-soft)"><img src="assets/prize-game.png" alt=""></div>
+          <div class="grow"><div class="title">Game Controller</div><div class="sub">Asked for 30 bucks</div></div>
+          <span class="tag" style="background:var(--yellow-soft)">Waiting</span>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Paid off</h2>
+        <div class="row">
+          <div class="tile" style="background:var(--mint-soft)"><img src="assets/prize-books.png" alt=""></div>
+          <div class="grow"><div class="title">Story Books</div><div class="sub">Borrowed 20, paid back 22 in 1 week</div></div>
+          <span class="tag" style="background:var(--mint-soft)">Paid off</span>
         </div>
       </section>
     </main>
