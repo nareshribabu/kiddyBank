@@ -13,7 +13,9 @@ Status: plan approved. Implementation starts after the Jira setup is complete (e
 - Login:
   - Parent signs up with email and password.
   - Shared device: kid taps avatar and enters PIN; parent view also needs a parent PIN.
-  - Kid's own device: parent generates a one-time code (about 10 min, single use) or QR; the kid device stays signed in as that kid in kid view only. Parent can revoke linked devices.
+  - Switching on a shared device: the avatar chip (avatar, name, down arrow) opens a profile menu listing the current kid (checked), the other kids, and "Parent view" with a lock, like Netflix and Disney+. Choosing a person opens the PIN pad for them. The full-page profile picker is only the sign-in screen on a shared device. Forgot parent PIN: re-enter the account password.
+  - Parent view auto-locks back to the profile picker after about 5 minutes idle. After 5 wrong PIN tries the pad pauses for 1 minute (no scary messages).
+  - Kid's own device: parent generates a one-time code (about 10 min, single use) or QR; the kid device stays signed in as that kid in kid view only, with no profile picker or Parent tile. Parent can revoke linked devices.
   - PIN is a lock, never a password. Kid sessions are issued by an edge function and limited by row-level security to that kid's data.
 - Supabase free projects pause after about a week idle: add a daily GitHub Actions ping. Add a simple data export script before real families use it.
 

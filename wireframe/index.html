@@ -110,7 +110,19 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; color: var(--ink); text-decoration: none; }
 .brand img { width: 48px; height: 48px; }
 .account { display: flex; align-items: center; gap: 12px; justify-self: end; }
-.who { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 18px; }
+.who { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 18px; color: var(--ink); }
+button.who { border: 0; background: none; padding: 0; font-family: inherit; cursor: pointer; }
+.chev { width: 9px; height: 9px; border-right: 3px solid var(--ink-soft); border-bottom: 3px solid var(--ink-soft); transform: rotate(45deg); margin: -5px 4px 0 -2px; }
+.account { position: relative; }
+.menu { position: absolute; right: 0; top: calc(100% + 12px); width: 240px; padding: 10px; z-index: 20; display: flex; flex-direction: column; gap: 4px; }
+.menu-item { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 8px 10px; border-radius: var(--radius-tile); color: var(--ink); text-decoration: none; font-weight: 600; font-size: 16px; }
+a.menu-item:hover { background: var(--lavender-soft); }
+.menu-item.current { background: var(--bg); }
+.menu-item .avatar { width: 36px; height: 36px; box-shadow: none; }
+.check { width: 8px; height: 14px; margin: -4px 8px 0 auto; border-right: 3px solid var(--lavender); border-bottom: 3px solid var(--lavender); transform: rotate(45deg); }
+.menu hr { border: 0; height: 2px; background: var(--bg); margin: 4px; }
+.lock-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--coral); display: grid; place-items: center; }
+.lock-icon svg { width: 16px; height: 16px; fill: #fff; stroke: #fff; }
 .brand span, .who span { display: none; }
 .avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--peach-soft); box-shadow: var(--shadow-card); }
 .avatar img { width: 100%; height: 100%; }
@@ -201,6 +213,25 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
 .legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; background: var(--lavender); }
 .legend span.interest::before { background: var(--coral); }
 
+/* Profile picker and PIN pad */
+body.plain .topbar { display: none; }
+.picker, .pin { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px; padding-top: 6vh; }
+.picker .logo { width: 80px; height: 80px; }
+.profiles { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+.profile { width: 150px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); font-weight: 600; font-size: 18px; }
+.profile small { margin-top: -10px; color: var(--ink-soft); font-size: 13px; font-weight: 500; }
+.profile .avatar, .pin .avatar { width: 88px; height: 88px; position: relative; }
+.avatar.initial { display: grid; place-items: center; background: var(--sky-soft); color: #1f4f7a; font-size: 36px; font-weight: 700; }
+.lock { position: absolute; right: -4px; bottom: -4px; width: 32px; height: 32px; border-radius: 50%; background: var(--coral); box-shadow: var(--shadow-press); display: grid; place-items: center; }
+.lock svg { width: 16px; height: 16px; fill: #fff; stroke: #fff; }
+.dots { display: flex; gap: 16px; }
+.dots i { width: 18px; height: 18px; border-radius: 50%; background: var(--card); box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1); }
+.dots i.on { background: var(--lavender); box-shadow: var(--shadow-press); }
+.keys { display: grid; grid-template-columns: repeat(3, 76px); gap: 16px; }
+.key { width: 76px; height: 76px; border: 0; border-radius: 50%; background: var(--card); box-shadow: var(--shadow-card); font: inherit; font-size: 28px; font-weight: 600; color: var(--ink); cursor: pointer; }
+.key:active { background: var(--lavender-soft); }
+.key.del { font-size: 15px; color: var(--ink-soft); }
+
 @media (min-width: 520px) {
   .brand span, .who span { display: inline; }
 }
@@ -244,9 +275,22 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
       </nav>
       <div class="account">
         <div class="coins"><img src="assets/coin.png" alt="">120</div>
-        <div class="who">
+        <button class="who" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="profile-menu">
           <span>Theo</span>
           <div class="avatar"><img src="assets/kid-boy.png" alt=""></div>
+          <i class="chev"></i>
+        </button>
+        <div class="card menu" id="profile-menu" role="menu" hidden>
+          <div class="menu-item current" role="menuitem" aria-current="true">
+            <div class="avatar"><img src="assets/kid-boy.png" alt=""></div>Theo<i class="check"></i>
+          </div>
+          <a class="menu-item" role="menuitem" href="#pin" data-who="nia">
+            <div class="avatar"><img src="assets/kid-girl.png" alt=""></div>Nia
+          </a>
+          <hr>
+          <a class="menu-item" role="menuitem" href="#pin" data-who="parent">
+            <span class="lock-icon"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5 7V5a3 3 0 0 1 6 0v2" fill="none" stroke-width="2"/></svg></span>Parent view
+          </a>
         </div>
       </div>
     </header>
@@ -505,6 +549,45 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
         </div>
       </section>
     </main>
+
+    <!-- Profile picker: shared device, reached from the avatar -->
+    <main class="picker" data-screen="profiles" hidden>
+      <img class="logo" src="assets/piggy_head.png" alt="">
+      <h1>Who is using Kiddy Bank?</h1>
+      <div class="profiles">
+        <a class="card profile" href="#pin" data-who="theo">
+          <div class="avatar"><img src="assets/kid-boy.png" alt=""></div>Theo
+        </a>
+        <a class="card profile" href="#pin" data-who="nia">
+          <div class="avatar"><img src="assets/kid-girl.png" alt=""></div>Nia
+        </a>
+        <a class="card profile" href="#pin" data-who="parent">
+          <div class="avatar initial">S<span class="lock"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5 7V5a3 3 0 0 1 6 0v2" fill="none" stroke-width="2"/></svg></span></div>Sam<small>Grown-up</small>
+        </a>
+      </div>
+    </main>
+
+    <!-- PIN pad: kid PIN or parent PIN -->
+    <main class="pin" data-screen="pin" hidden>
+      <div class="avatar" id="pin-avatar"></div>
+      <h1 id="pin-title">Enter your PIN</h1>
+      <div class="dots" id="pin-dots"><i></i><i></i><i></i><i></i></div>
+      <div class="keys">
+        <button class="key" type="button">1</button><button class="key" type="button">2</button><button class="key" type="button">3</button>
+        <button class="key" type="button">4</button><button class="key" type="button">5</button><button class="key" type="button">6</button>
+        <button class="key" type="button">7</button><button class="key" type="button">8</button><button class="key" type="button">9</button>
+        <span></span><button class="key" type="button">0</button><button class="key del" type="button">Delete</button>
+      </div>
+      <a class="see-all" id="pin-forgot" href="#pin">Forgot PIN? Use your password</a>
+      <a class="see-all" href="#home">Cancel</a>
+    </main>
+
+    <!-- Parent dashboard: next screen to build -->
+    <main class="picker" data-screen="parent" hidden>
+      <h1>Parent dashboard</h1>
+      <p class="sub">Coming next.</p>
+      <a class="see-all" href="#home">Back to kid view</a>
+    </main>
   </div>
 </div>
 
@@ -512,11 +595,13 @@ h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
 /* Show the screen named by the URL hash; default to home. */
 const screens = [...document.querySelectorAll("[data-screen]")];
 const tabs = [...document.querySelectorAll(".tab")];
+const plainScreens = ["profiles", "pin", "parent"];
 
 function show() {
   const name = location.hash.slice(1);
   const current = screens.some(s => s.dataset.screen === name) ? name : "home";
   screens.forEach(s => { s.hidden = s.dataset.screen !== current; });
+  document.body.classList.toggle("plain", plainScreens.includes(current));
   tabs.forEach(t => {
     const on = t.getAttribute("href") === "#" + current;
     t.classList.toggle("active", on);
@@ -526,6 +611,54 @@ function show() {
 }
 addEventListener("hashchange", show);
 show();
+
+/* PIN pad demo: any 4 digits unlock. The real app checks the PIN in an edge function. */
+const people = {
+  theo: { title: "Hi Theo, enter your PIN", avatar: '<img src="assets/kid-boy.png" alt="">', next: "#home", parent: false },
+  nia: { title: "Hi Nia, enter your PIN", avatar: '<img src="assets/kid-girl.png" alt="">', next: "#home", parent: false },
+  parent: { title: "Enter your parent PIN", avatar: "S", next: "#parent", parent: true }
+};
+let who = people.parent;
+let digits = "";
+const dots = [...document.querySelectorAll("#pin-dots i")];
+
+function pickPerson(key) {
+  who = people[key];
+  digits = "";
+  const avatar = document.getElementById("pin-avatar");
+  avatar.innerHTML = who.avatar;
+  avatar.classList.toggle("initial", who.parent);
+  document.getElementById("pin-title").textContent = who.title;
+  document.getElementById("pin-forgot").hidden = !who.parent;
+  drawDots();
+}
+
+function drawDots() {
+  dots.forEach((d, i) => d.classList.toggle("on", i < digits.length));
+}
+
+function pressKey(key) {
+  digits = key.classList.contains("del") ? digits.slice(0, -1) : (digits + key.textContent).slice(0, 4);
+  drawDots();
+  if (digits.length === 4) setTimeout(() => { location.hash = who.next; }, 250);
+}
+
+/* Profile menu: opens from the avatar chip, closes on outside click, Escape, or navigation. */
+const whoButton = document.querySelector("button.who");
+const profileMenu = document.getElementById("profile-menu");
+
+function setMenu(open) {
+  profileMenu.hidden = !open;
+  whoButton.setAttribute("aria-expanded", open);
+}
+whoButton.addEventListener("click", e => { e.stopPropagation(); setMenu(profileMenu.hidden); });
+document.addEventListener("click", e => { if (!profileMenu.contains(e.target)) setMenu(false); });
+addEventListener("keydown", e => { if (e.key === "Escape") setMenu(false); });
+addEventListener("hashchange", () => setMenu(false));
+
+document.querySelectorAll("[data-who]").forEach(a => a.addEventListener("click", () => pickPerson(a.dataset.who)));
+document.querySelectorAll(".key").forEach(k => k.addEventListener("click", () => pressKey(k)));
+pickPerson("parent");
 </script>
 </body>
 </html>
