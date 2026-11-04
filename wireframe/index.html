@@ -21,6 +21,7 @@
   --mint-soft: #d9f5ea;
   --peach-soft: #ffe6d6;
   --coral: #ff7a6b;
+  --sky: #b9ddfb;
   --sky-soft: #dcefff;
   --yellow-soft: #fff4c7;
 
@@ -36,6 +37,9 @@
     inset 2px 2px 4px rgba(255, 255, 255, 0.7),
     inset -3px -3px 6px rgba(0, 0, 0, 0.08),
     0 8px 18px rgba(139, 124, 246, 0.35);
+  --shadow-coral:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.5),
+    0 8px 18px rgba(255, 122, 107, 0.4);
 }
 
 * { box-sizing: border-box; margin: 0; }
@@ -213,8 +217,36 @@ a.menu-item:hover { background: var(--lavender-soft); }
 .legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; background: var(--lavender); }
 .legend span.interest::before { background: var(--coral); }
 
+/* Parent dashboard */
+.parent { display: flex; flex-direction: column; gap: 18px; }
+.count { min-width: 26px; height: 26px; padding: 0 8px; border-radius: var(--radius-pill); background: var(--card); color: var(--ink); font-size: 14px; display: grid; place-items: center; }
+.kid-card .avatar { width: 52px; height: 52px; }
+.who .avatar.initial { font-size: 22px; }
+.menu .avatar.initial { font-size: 16px; }
+.tab { position: relative; }
+.tab .count { position: absolute; top: -4px; right: -2px; min-width: 22px; height: 22px; padding: 0 6px; font-size: 12px; background: var(--coral); color: #fff; }
+.parent-main { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.parent-main h2 { margin-bottom: -6px; }
+.p-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.btn.coral { background: var(--coral); box-shadow: var(--shadow-coral); }
+.btn.light { background: var(--card); color: var(--ink); box-shadow: var(--shadow-card); }
+.p-head .btn { width: auto; padding: 14px 28px; margin: 0; }
+.kids { display: grid; gap: 18px; }
+.kid-card { display: flex; flex-direction: column; gap: 12px; }
+.kid-card .figures { margin: 4px 0; }
+.board { display: grid; gap: 18px; align-items: start; }
+.col { border-radius: var(--radius-card); padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+.col-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px 10px 18px; border-radius: var(--radius-pill); background: var(--card); box-shadow: var(--shadow-card); font-weight: 700; }
+.col-head .count { background: var(--bg); }
+.mini { padding: 16px; border-radius: 22px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.mini .tag { margin: 0 0 2px; }
+.mini p { line-height: 1.45; }
+.mini .btn { margin-top: 8px; }
+.actions { display: flex; gap: 10px; width: 100%; margin-top: 8px; }
+.actions .btn { margin-top: 0; }
+
 /* Profile picker and PIN pad */
-body.plain .topbar { display: none; }
+body.plain .kid-bar { display: none; }
 .picker, .pin { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px; padding-top: 6vh; }
 .picker .logo { width: 80px; height: 80px; }
 .profiles { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
@@ -254,6 +286,8 @@ body.plain .topbar { display: none; }
   .loan-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
   .hero { padding: 32px 40px; }
   .shop-hero { padding: 24px 40px; }
+  .kids { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .board { grid-template-columns: repeat(3, 1fr); gap: 20px; }
 }
 </style>
 </head>
@@ -262,7 +296,7 @@ body.plain .topbar { display: none; }
 <!-- Screen 1: Kid home -->
 <div class="app" id="kid-home">
   <div class="wrap">
-    <header class="topbar">
+    <header class="topbar kid-bar">
       <a class="brand" href="#home">
         <img src="assets/piggy_head.png" alt="">
         <span>Kiddy Bank</span>
@@ -582,11 +616,127 @@ body.plain .topbar { display: none; }
       <a class="see-all" href="#home">Cancel</a>
     </main>
 
-    <!-- Parent dashboard: next screen to build -->
-    <main class="picker" data-screen="parent" hidden>
-      <h1>Parent dashboard</h1>
-      <p class="sub">Coming next.</p>
-      <a class="see-all" href="#home">Back to kid view</a>
+    <!-- Screen 4: Parent dashboard -->
+    <main class="parent" data-screen="parent" hidden>
+      <header class="topbar">
+        <a class="brand" href="#parent">
+          <img src="assets/piggy_head.png" alt="">
+          <span>Kiddy Bank</span>
+        </a>
+        <nav class="tabbar" aria-label="Parent">
+          <a class="tab" href="#parent"><i></i>Dashboard</a>
+          <a class="tab" href="#parent-kids"><i></i>Kids</a>
+          <a class="tab" href="#parent-loans"><i></i>Loans<b class="count">1</b></a>
+          <a class="tab" href="#parent-shop"><i></i>Shop</a>
+          <a class="tab" href="#parent-settings"><i></i>Settings</a>
+        </nav>
+        <div class="account">
+          <button class="who" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="parent-menu">
+            <span>Sam</span>
+            <div class="avatar initial">S</div>
+            <i class="chev"></i>
+          </button>
+          <div class="card menu" id="parent-menu" role="menu" hidden>
+            <div class="menu-item current" role="menuitem" aria-current="true">
+              <div class="avatar initial">S</div>Sam<i class="check"></i>
+            </div>
+            <a class="menu-item" role="menuitem" href="#pin" data-who="theo">
+              <div class="avatar"><img src="assets/kid-boy.png" alt=""></div>Theo
+            </a>
+            <a class="menu-item" role="menuitem" href="#pin" data-who="nia">
+              <div class="avatar"><img src="assets/kid-girl.png" alt=""></div>Nia
+            </a>
+            <hr>
+            <a class="menu-item" role="menuitem" href="#profiles">
+              <span class="lock-icon"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5 7V5a3 3 0 0 1 6 0v2" fill="none" stroke-width="2"/></svg></span>Lock and exit
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <div class="parent-main">
+        <header class="p-head">
+          <div>
+            <h1>Hi, Sam</h1>
+            <p class="sub">Here is how your kids are doing.</p>
+          </div>
+          <a class="btn coral" href="#parent">Award bucks</a>
+        </header>
+
+        <section class="kids">
+          <div class="card kid-card">
+            <div class="row">
+              <div class="avatar"><img src="assets/kid-boy.png" alt=""></div>
+              <div class="grow"><div class="title">Theo</div><div class="sub">3 active loans</div></div>
+              <a class="arrow" href="#parent" aria-label="View Theo"></a>
+            </div>
+            <div class="figures">
+              <div class="figure"><b>120</b><span>Balance</span></div>
+              <div class="figure"><b>45</b><span>Saved</span></div>
+              <div class="figure owe"><b>44</b><span>Owed</span></div>
+            </div>
+            <div class="paid"><span>Goal: Toy Rocket</span><b>45 of 200</b></div>
+            <div class="progress slim"><span style="width:22.5%"></span></div>
+          </div>
+          <div class="card kid-card">
+            <div class="row">
+              <div class="avatar"><img src="assets/kid-girl.png" alt=""></div>
+              <div class="grow"><div class="title">Nia</div><div class="sub">No loans</div></div>
+              <a class="arrow" href="#parent" aria-label="View Nia"></a>
+            </div>
+            <div class="figures">
+              <div class="figure"><b>75</b><span>Balance</span></div>
+              <div class="figure"><b>30</b><span>Saved</span></div>
+              <div class="figure owe"><b>0</b><span>Owed</span></div>
+            </div>
+            <div class="paid"><span>Goal: Soccer Ball</span><b>30 of 80</b></div>
+            <div class="progress slim"><span style="width:37.5%"></span></div>
+          </div>
+        </section>
+
+        <h2>Needs you</h2>
+        <section class="board">
+          <div class="col" style="background:var(--lavender-soft)">
+            <div class="col-head">Loan requests<b class="count">1</b></div>
+            <div class="card mini">
+              <span class="tag" style="background:var(--lavender-soft)">Theo</span>
+              <div class="title">Game Controller</div>
+              <div class="sub">Asks to borrow 30 bucks at 10% a week</div>
+              <div class="actions"><a class="btn coral" href="#parent">Approve</a><a class="btn light" href="#parent">Deny</a></div>
+            </div>
+          </div>
+          <div class="col" style="background:var(--peach-soft)">
+            <div class="col-head">Prizes to hand over<b class="count">2</b></div>
+            <div class="card mini">
+              <span class="tag" style="background:var(--peach-soft)">Nia</span>
+              <div class="title">Story Books</div>
+              <div class="sub">Bought today for 40 bucks</div>
+              <a class="btn coral" href="#parent">Mark as given</a>
+            </div>
+            <div class="card mini">
+              <span class="tag" style="background:var(--peach-soft)">Nia</span>
+              <div class="title">Mystery Gift</div>
+              <div class="sub">Bought yesterday for 30 bucks</div>
+              <a class="btn coral" href="#parent">Mark as given</a>
+            </div>
+          </div>
+          <div class="col" style="background:var(--mint-soft)">
+            <div class="col-head">Talk about it<b class="count">3</b></div>
+            <div class="card mini">
+              <span class="tag" style="background:var(--mint-soft)">Theo</span>
+              <p>Theo has 3 loans open. Ask about a plan to pay them back.</p>
+            </div>
+            <div class="card mini">
+              <span class="tag" style="background:var(--mint-soft)">Theo</span>
+              <p>Theo paid off the Story Books loan in 1 week. Say well done.</p>
+            </div>
+            <div class="card mini">
+              <span class="tag" style="background:var(--mint-soft)">Nia</span>
+              <p>Nia is 50 bucks away from the Soccer Ball. Ask what makes it worth saving for.</p>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
   </div>
 </div>
@@ -599,7 +749,8 @@ const plainScreens = ["profiles", "pin", "parent"];
 
 function show() {
   const name = location.hash.slice(1);
-  const current = screens.some(s => s.dataset.screen === name) ? name : "home";
+  const fallback = name.startsWith("parent") ? "parent" : "home";
+  const current = screens.some(s => s.dataset.screen === name) ? name : fallback;
   screens.forEach(s => { s.hidden = s.dataset.screen !== current; });
   document.body.classList.toggle("plain", plainScreens.includes(current));
   tabs.forEach(t => {
@@ -643,18 +794,25 @@ function pressKey(key) {
   if (digits.length === 4) setTimeout(() => { location.hash = who.next; }, 250);
 }
 
-/* Profile menu: opens from the avatar chip, closes on outside click, Escape, or navigation. */
-const whoButton = document.querySelector("button.who");
-const profileMenu = document.getElementById("profile-menu");
+/* Profile menus: open from an avatar chip, close on outside click, Escape, or navigation. */
+const menuButtons = [...document.querySelectorAll("button.who")];
 
-function setMenu(open) {
-  profileMenu.hidden = !open;
-  whoButton.setAttribute("aria-expanded", open);
+function setMenu(button, open) {
+  document.getElementById(button.getAttribute("aria-controls")).hidden = !open;
+  button.setAttribute("aria-expanded", open);
 }
-whoButton.addEventListener("click", e => { e.stopPropagation(); setMenu(profileMenu.hidden); });
-document.addEventListener("click", e => { if (!profileMenu.contains(e.target)) setMenu(false); });
-addEventListener("keydown", e => { if (e.key === "Escape") setMenu(false); });
-addEventListener("hashchange", () => setMenu(false));
+function closeMenus() {
+  menuButtons.forEach(b => setMenu(b, false));
+}
+menuButtons.forEach(b => b.addEventListener("click", e => {
+  e.stopPropagation();
+  const open = b.getAttribute("aria-expanded") !== "true";
+  closeMenus();
+  setMenu(b, open);
+}));
+document.addEventListener("click", e => { if (!e.target.closest(".menu")) closeMenus(); });
+addEventListener("keydown", e => { if (e.key === "Escape") closeMenus(); });
+addEventListener("hashchange", closeMenus);
 
 document.querySelectorAll("[data-who]").forEach(a => a.addEventListener("click", () => pickPerson(a.dataset.who)));
 document.querySelectorAll(".key").forEach(k => k.addEventListener("click", () => pressKey(k)));

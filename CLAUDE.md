@@ -12,7 +12,8 @@ Wireframe is `wireframe/index.html`: one static file, no framework, hash router 
 - Kid home: approved and committed.
 - Kid shop: approved and committed.
 - Kid loans: approved and committed.
-- Still to build: parent dashboard, child detail. Savings tab has no screen yet (not in the M0 list).
+- Parent dashboard: built and committed (same top bar and profile menu as the kid view, kid cards, "Needs you" board); awaiting owner approval.
+- Still to build: child detail. Savings tab has no screen yet (not in the M0 list).
 - Then KBP-20 sign-off: owner approves in writing; only then start M1.
 
 Decisions made in M0:
@@ -28,10 +29,11 @@ Decisions made in M0:
 - At M1, fix button contrast: white text on lavender is about 3.3:1; darken the button fill token to reach 4.5:1.
 
 Pending owner decisions (ask the owner about these first when resuming, before building anything new):
-1. Home hero button text "Browse the shop" stays as a placeholder; revisit at sign-off.
-2. After all five screens are built: written sign-off for KBP-20 before M1.
+1. Approve the parent dashboard, or give notes.
+2. Home hero button text "Browse the shop" stays as a placeholder; revisit at sign-off.
+3. After all five screens are built: written sign-off for KBP-20 before M1.
 
-To resume: read `plan.md` and the M0 stories in Jira, open `wireframe/index.html`, then continue with the parent dashboard using the clay-component skill.
+To resume: read `plan.md` and the M0 stories in Jira, open `wireframe/index.html`, then ask for parent dashboard approval and build child detail using the clay-component skill.
 
 ## Tech stack
 - Vite, React, TypeScript, Tailwind CSS, Motion (animation)
