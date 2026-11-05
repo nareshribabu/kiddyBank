@@ -31,9 +31,9 @@ Decisions made in M0:
 - At M1, export the PNGs as smaller WebP (they are about 1MB each).
 - At M1, fix button contrast: white text on lavender (about 3.3:1) and on coral fails 4.5:1; darken the button fill tokens.
 
-Before starting M1, ask the owner first: they have general coding-practice notes to share. Branch merge to `main` is also pending.
+Coding-practice notes from the owner are now in "Coding guidelines". PR #1 (M0 wireframe into `main`) awaits owner review and merge.
 
-To resume: read `plan.md` and the M1 stories in Jira (epic KBP-7), then ask for the owner's coding-practice notes before building.
+To resume: read `plan.md` and the M1 stories in Jira (epic KBP-7), confirm with the owner before starting M1, then build one story at a time.
 
 ## Tech stack
 - Vite, React, TypeScript, Tailwind CSS, Motion (animation)
@@ -59,9 +59,32 @@ To resume: read `plan.md` and the M1 stories in Jira (epic KBP-7), then ask for 
 Claymorphism: soft layered shadows, radii of 24px or more, pastel palette, pill buttons and tags, rounded font (Fredoka or Nunito). Colors, shadows, and radii live in one design-token file. Reuse the base components (ClayCard, ClayButton, ClayInput, ProgressBar, Tag, Modal, Avatar) instead of styling ad hoc.
 
 ## Coding guidelines
-- Keep it simple. Do not overengineer or program defensively; use try/catch only where needed.
+Write simple, boring, predictable code, as a pragmatic senior engineer would. Readable and maintainable beats clever.
+
+Structure:
+- Single responsibility: each function and module does one thing. Aim for functions under about 25 lines; extract cohesive helpers when longer.
+- Keep flow linear. Use guard clauses and early returns instead of deep nesting.
+- Name things for what they mean (`weeklyInterest`, not `calc`). No cryptic abbreviations.
+- No duplicated logic: extract shared behavior into small pure functions. Do not add an abstraction until it is used twice.
+- Prefer pure functions and immutable data. Keep side effects (database, network, time) at the edges so the logic is easy to test.
+- Strict TypeScript. No `any` or unchecked casts; model money and ids with clear types.
+
+Errors:
+- Validate at system boundaries (user input, Supabase responses, edge function requests), then trust the types inside. Do not add defensive checks for cases that cannot happen.
+- Never swallow errors. No empty catch blocks; handle the error or let it propagate.
+
+Comments:
+- Docstrings say what a function is for. Other comments explain why (a business rule or constraint), never what the code does.
+
+Testing (scale effort to risk):
+- Heavy: money, ledger, balance, interest, purchases, and anything permission-related. Unit test edge cases, rounding, and failure paths; test row-level security with two families.
+- Moderate: hooks and components with real logic or state (forms, PIN pad, goal progress). Test behavior, not implementation.
+- Light: simple presentational components. A showcase entry or a smoke test is enough.
+- A bug fix gets a test that failed before the fix.
+
+Process:
+- Keep it simple. Do not overengineer; use try/catch only where needed.
 - Work in small incremental steps and validate each one before moving on.
-- Short modules, short functions, clear names. Concise docstring comments; few comments elsewhere.
 - Use the latest library APIs.
 - No emojis in code, print statements, or logging.
 - Keep README.md concise.
