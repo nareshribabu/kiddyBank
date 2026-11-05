@@ -6,16 +6,16 @@ Interactive banking game that teaches kids financial literacy and helps parents 
 The full plan and milestones (0 to 12) are in `plan.md`. Build one milestone at a time and verify it before moving on. Jira setup is done; the board is "Kiddy Bank Product" (project key KBP, epics KBP-6 to KBP-18 are M0 to M12; M0 stories are KBP-19 build wireframe, KBP-20 sign-off). Jira is the source of truth for stories; use the Atlassian MCP (reconnect with `/mcp` on a new machine).
 
 ## Status
-Milestone 0 (KBP-6), wireframe, in progress. No app code yet; the commands below are planned for Milestone 1. Work happens on branch `wip/m0-wireframe` (pushed to GitHub); merge to `main` after KBP-20 sign-off.
+Milestone 0 (KBP-6), wireframe, is complete: owner signed off (KBP-20) and KBP-6, KBP-19, KBP-20 are Done in Jira. No app code yet; the commands below are planned for Milestone 1. Work happened on branch `wip/m0-wireframe` (pushed to GitHub).
 
 Wireframe is `wireframe/index.html`: one static file, no framework, hash router (`#home`, `#shop`, `#loans`, `#profiles`, `#pin`, `#parent`; unknown `#parent-*` links fall back to the dashboard), design tokens in the `:root` block. Open it in a browser to review.
 - Kid home: approved and committed.
 - Kid shop: approved and committed.
 - Kid loans: approved and committed.
 - Parent dashboard: approved and committed.
-- Child detail (`#parent-theo`, Theo only; reached from his kid card arrow): built, awaiting owner approval. Back link, "Award bucks" and "Deduct bucks", stat cards, Goal, Loan rules (10% a week, limit 100 bucks, limit is sample data), Loans (pending request with Approve and Deny, 3 active, 1 paid off), Recent activity. Nia's card still links to the dashboard.
+- Child detail (`#parent-theo`, Theo only; reached from his kid card arrow): approved and committed. Back link, "Award bucks" and "Deduct bucks", stat cards, Goal, Loan rules (10% a week, limit 100 bucks, limit is sample data), Loans (pending request with Approve and Deny, 3 active, 1 paid off), Recent activity. Nia's card still links to the dashboard.
 - Savings tab has no screen yet (not in the M0 list).
-- Then KBP-20 sign-off: owner approves in writing; only then start M1.
+- All five screens approved. Home hero button stays "Browse the shop".
 
 Decisions made in M0:
 - Layout is fluid and full width (content capped at 1440px, confirmed). Logo left, centered pill nav on desktop, bottom tab bar on phones, bucks chip and profile on the right.
@@ -31,12 +31,9 @@ Decisions made in M0:
 - At M1, export the PNGs as smaller WebP (they are about 1MB each).
 - At M1, fix button contrast: white text on lavender (about 3.3:1) and on coral fails 4.5:1; darken the button fill tokens.
 
-Pending owner decisions (ask the owner about these first when resuming, before building anything new):
-1. Approve child detail, or give notes.
-2. Home hero button text "Browse the shop" stays as a placeholder; revisit at sign-off.
-3. After all five screens are built: written sign-off for KBP-20 before M1.
+Before starting M1, ask the owner first: they have general coding-practice notes to share. Branch merge to `main` is also pending.
 
-To resume: read `plan.md` and the M0 stories in Jira, open `wireframe/index.html`, then ask for child detail approval.
+To resume: read `plan.md` and the M1 stories in Jira (epic KBP-7), then ask for the owner's coding-practice notes before building.
 
 ## Tech stack
 - Vite, React, TypeScript, Tailwind CSS, Motion (animation)
