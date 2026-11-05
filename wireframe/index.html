@@ -245,6 +245,21 @@ a.menu-item:hover { background: var(--lavender-soft); }
 .actions { display: flex; gap: 10px; width: 100%; margin-top: 8px; }
 .actions .btn { margin-top: 0; }
 
+/* Child detail */
+.back { color: var(--lavender); font-weight: 600; text-decoration: none; }
+.back::before { content: "< "; }
+.avatar.big { width: 72px; height: 72px; flex: none; }
+.actions-inline { display: flex; gap: 10px; flex-wrap: wrap; }
+.actions-inline .btn { width: auto; margin: 0; padding: 12px 22px; }
+.detail { display: grid; gap: 18px; }
+.detail .goal-card { display: flex; flex-direction: column; }
+.detail .goal-card .progress { margin-top: auto; }
+.detail h2 { margin-bottom: 14px; }
+.detail img.prize { width: 64px; height: 64px; }
+.rule { display: flex; justify-content: space-between; padding: 10px 0; }
+.rule span { color: var(--ink-soft); }
+.detail .rule + .btn, .detail .rule + .rule + .btn { margin-top: 8px; }
+
 /* Profile picker and PIN pad */
 body.plain .kid-bar { display: none; }
 .picker, .pin { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px; padding-top: 6vh; }
@@ -288,6 +303,8 @@ body.plain .kid-bar { display: none; }
   .shop-hero { padding: 24px 40px; }
   .kids { grid-template-columns: repeat(2, 1fr); gap: 24px; }
   .board { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .detail { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .detail .wide { grid-column: 1 / -1; }
 }
 </style>
 </head>
@@ -617,7 +634,7 @@ body.plain .kid-bar { display: none; }
     </main>
 
     <!-- Screen 4: Parent dashboard -->
-    <main class="parent" data-screen="parent" hidden>
+    <main class="parent" data-screen="parent parent-theo" hidden>
       <header class="topbar">
         <a class="brand" href="#parent">
           <img src="assets/piggy_head.png" alt="">
@@ -653,7 +670,7 @@ body.plain .kid-bar { display: none; }
         </div>
       </header>
 
-      <div class="parent-main">
+      <div class="parent-main" data-screen="parent">
         <header class="p-head">
           <div>
             <h1>Hi, Sam</h1>
@@ -667,7 +684,7 @@ body.plain .kid-bar { display: none; }
             <div class="row">
               <div class="avatar"><img src="assets/kid-boy.png" alt=""></div>
               <div class="grow"><div class="title">Theo</div><div class="sub">3 active loans</div></div>
-              <a class="arrow" href="#parent" aria-label="View Theo"></a>
+              <a class="arrow" href="#parent-theo" aria-label="View Theo"></a>
             </div>
             <div class="figures">
               <div class="figure"><b>120</b><span>Balance</span></div>
@@ -736,6 +753,94 @@ body.plain .kid-bar { display: none; }
           </div>
         </section>
       </div>
+
+      <div class="parent-main" data-screen="parent-theo" hidden>
+        <a class="back" href="#parent">All kids</a>
+        <header class="p-head">
+          <div class="row">
+            <div class="avatar big"><img src="assets/kid-boy.png" alt=""></div>
+            <div>
+              <h1>Theo</h1>
+              <p class="sub">3 active loans, saving for the Toy Rocket</p>
+            </div>
+          </div>
+          <div class="actions-inline">
+            <a class="btn coral" href="#parent-theo">Award bucks</a>
+            <a class="btn light" href="#parent-theo">Deduct bucks</a>
+          </div>
+        </header>
+
+        <section class="stats">
+          <div class="card stat"><b>120</b><span>Balance</span></div>
+          <div class="card stat"><b>45</b><span>Saved</span></div>
+          <div class="card stat"><b>44</b><span>Owed</span></div>
+        </section>
+
+        <div class="detail">
+          <section class="card goal-card">
+            <h2>Goal</h2>
+            <div class="row">
+              <img class="prize" src="assets/prize-rocket.png" alt="" width="64" height="64">
+              <div class="grow"><div class="title">Toy Rocket</div><div class="sub">45 of 200 bucks</div></div>
+            </div>
+            <div class="progress"><span style="width:22.5%"></span></div>
+          </section>
+
+          <section class="card">
+            <h2>Loan rules</h2>
+            <div class="rule"><span>Interest rate</span><b>10% a week</b></div>
+            <div class="rule"><span>Loan limit</span><b>100 bucks</b></div>
+            <a class="btn light" href="#parent-theo">Change rules</a>
+          </section>
+
+          <section class="card wide">
+            <h2>Loans</h2>
+            <div class="list">
+              <div class="row">
+                <div class="tile" style="background:var(--lavender-soft)"><img src="assets/prize-game.png" alt=""></div>
+                <div class="grow"><div class="title">Game Controller</div><div class="sub">Asks to borrow 30 bucks at 10% a week</div></div>
+                <div class="actions-inline"><a class="btn coral" href="#parent-theo">Approve</a><a class="btn light" href="#parent-theo">Deny</a></div>
+              </div>
+              <div class="row">
+                <div class="tile" style="background:var(--peach-soft)"><img src="assets/prize-ball.png" alt=""></div>
+                <div class="grow"><div class="title">Soccer Ball</div><div class="sub">20 left to pay</div></div>
+                <span class="tag rate">10% a week</span>
+              </div>
+              <div class="row">
+                <div class="tile" style="background:var(--peach-soft)"><img src="assets/prize-teddy.png" alt=""></div>
+                <div class="grow"><div class="title">Teddy Bear</div><div class="sub">13 left to pay</div></div>
+                <span class="tag rate">10% a week</span>
+              </div>
+              <div class="row">
+                <div class="tile" style="background:var(--peach-soft)"><img src="assets/prize-gift.png" alt=""></div>
+                <div class="grow"><div class="title">Mystery Gift</div><div class="sub">11 left to pay</div></div>
+                <span class="tag rate">10% a week</span>
+              </div>
+              <div class="row">
+                <div class="tile" style="background:var(--mint-soft)"><img src="assets/prize-books.png" alt=""></div>
+                <div class="grow"><div class="title">Story Books</div><div class="sub">Paid off: borrowed 20, paid 22 in 1 week</div></div>
+                <span class="tag" style="background:var(--mint-soft)">Paid off</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="card wide">
+            <h2>Recent activity</h2>
+            <div class="list">
+              <div class="row">
+                <div class="tile" style="background:var(--mint-soft)"><img src="assets/star.png" alt=""></div>
+                <div class="grow"><div class="title">Cleaned my room</div><div class="sub">Today</div></div>
+                <b>+10</b>
+              </div>
+              <div class="row">
+                <div class="tile" style="background:var(--yellow-soft)"><img src="assets/trophy.png" alt=""></div>
+                <div class="grow"><div class="title">Reading streak bonus</div><div class="sub">Yesterday</div></div>
+                <b>+5</b>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
     </main>
   </div>
 </div>
@@ -744,16 +849,18 @@ body.plain .kid-bar { display: none; }
 /* Show the screen named by the URL hash; default to home. */
 const screens = [...document.querySelectorAll("[data-screen]")];
 const tabs = [...document.querySelectorAll(".tab")];
-const plainScreens = ["profiles", "pin", "parent"];
+const plainScreens = ["profiles", "pin", "parent", "parent-theo"];
+const names = s => s.dataset.screen.split(" ");
 
 function show() {
   const name = location.hash.slice(1);
   const fallback = name.startsWith("parent") ? "parent" : "home";
-  const current = screens.some(s => s.dataset.screen === name) ? name : fallback;
-  screens.forEach(s => { s.hidden = s.dataset.screen !== current; });
+  const current = screens.some(s => names(s).includes(name)) ? name : fallback;
+  screens.forEach(s => { s.hidden = !names(s).includes(current); });
   document.body.classList.toggle("plain", plainScreens.includes(current));
+  const tabName = current === "parent-theo" ? "parent" : current;
   tabs.forEach(t => {
-    const on = t.getAttribute("href") === "#" + current;
+    const on = t.getAttribute("href") === "#" + tabName;
     t.classList.toggle("active", on);
     on ? t.setAttribute("aria-current", "page") : t.removeAttribute("aria-current");
   });
