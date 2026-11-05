@@ -26,7 +26,7 @@ Status: plan approved, Jira set up (project KBP). Milestone 0 wireframe in progr
 - Pastel palette with one saturated accent per context: lavender/purple (primary, kid app), mint, peach, coral (primary action), sky blue (sidebar/parent nav), soft yellow. Colored column backgrounds with tinted cards (as in the board reference).
 - Colored pill tags for categories and statuses, small circular avatars, progress bars with a mint fill.
 - Kid view: large tap targets, 3D mascot and prize illustrations, coin balance chip top-right, bottom tab bar (Home, Savings, Loans, Shop), bold rounded headings, little text.
-- Parent view: same clay language but denser; same top bar and profile menu as the kid view (a sky-blue sidebar was tried and rejected), one card per child on the dashboard, a "Needs you" board with colored columns, status pills, coral for parent actions.
+- Parent view: same clay language but denser; same top bar and profile menu as the kid view (a sky-blue sidebar was tried and rejected), one card per child on the dashboard, a "To do" board with colored columns, status pills, coral for parent actions.
 - Rounded font: Fredoka or Nunito (Google Fonts). Design tokens (colors, shadows, radii) live in one file so the look changes in one place.
 - Assets: need a mascot and prize icons (free 3D/clay icon packs, generated, or commissioned). Decide at Milestone 1.
 
