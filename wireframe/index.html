@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiddy Bank Wireframe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Design tokens: colors, shadows, radii live here only. */
+:root {
+  --bg: #f4f6fc;
+  --card: #ffffff;
+  --ink: #2b2d4a;
+  --ink-soft: #6b6f8e;
+
+  --lavender: #8b7cf6;
+  --lavender-soft: #e9e5ff;
+  --mint: #4cc9a0;
+  --mint-soft: #d9f5ea;
+  --peach-soft: #ffe6d6;
+  --coral: #ff7a6b;
+  --sky: #b9ddfb;
+  --sky-soft: #dcefff;
+  --yellow-soft: #fff4c7;
+
+  --radius-card: 28px;
+  --radius-tile: 20px;
+  --radius-pill: 999px;
+
+  --shadow-card:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.9),
+    inset -3px -3px 6px rgba(139, 124, 246, 0.08),
+    0 12px 28px rgba(110, 120, 180, 0.16);
+  --shadow-press:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.7),
+    inset -3px -3px 6px rgba(0, 0, 0, 0.08),
+    0 8px 18px rgba(139, 124, 246, 0.35);
+  --shadow-coral:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.5),
+    0 8px 18px rgba(255, 122, 107, 0.4);
+}
+
+* { box-sizing: border-box; margin: 0; }
+body {
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* Shared pieces */
+.card {
+  background: var(--card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+}
+.pill {
+  display: inline-block;
+  text-decoration: none;
+  border-radius: var(--radius-pill);
+  background: var(--lavender);
+  color: #fff;
+  box-shadow: var(--shadow-press);
+  padding: 12px 22px;
+  font-weight: 600;
+  font-size: 16px;
+}
+.tile {
+  width: 56px; height: 56px;
+  border-radius: var(--radius-tile);
+  display: grid; place-items: center;
+  flex: none;
+}
+.tile img { width: 38px; height: 38px; }
+.progress {
+  height: 14px;
+  border-radius: var(--radius-pill);
+  background: var(--mint-soft);
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+.progress > span {
+  display: block; height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--mint);
+}
+.arrow {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--lavender);
+  box-shadow: var(--shadow-press);
+  display: grid; place-items: center;
+  flex: none;
+}
+.arrow::after {
+  content: ""; width: 9px; height: 9px;
+  border-top: 3px solid #fff; border-right: 3px solid #fff;
+  transform: rotate(45deg); margin-left: -3px;
+}
+.row { display: flex; align-items: center; gap: 14px; }
+.row .grow { flex: 1; min-width: 0; }
+.title { font-weight: 600; font-size: 17px; }
+.sub { color: var(--ink-soft); font-size: 14px; }
+h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 700; line-height: 1.15; }
+h2 { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
+
+/* Kid layout: fluid, full width, phone first */
+.app { min-height: 100vh; padding: 16px 16px 110px; }
+.wrap { max-width: 1440px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; color: var(--ink); text-decoration: none; }
+.brand img { width: 48px; height: 48px; }
+.account { display: flex; align-items: center; gap: 12px; justify-self: end; }
+.who { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 18px; color: var(--ink); }
+button.who { border: 0; background: none; padding: 0; font-family: inherit; cursor: pointer; }
+.chev { width: 9px; height: 9px; border-right: 3px solid var(--ink-soft); border-bottom: 3px solid var(--ink-soft); transform: rotate(45deg); margin: -5px 4px 0 -2px; }
+.account { position: relative; }
+.menu { position: absolute; right: 0; top: calc(100% + 12px); width: 240px; padding: 10px; z-index: 20; display: flex; flex-direction: column; gap: 4px; }
+.menu-item { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 8px 10px; border-radius: var(--radius-tile); color: var(--ink); text-decoration: none; font-weight: 600; font-size: 16px; }
+a.menu-item:hover { background: var(--lavender-soft); }
+.menu-item.current { background: var(--bg); }
+.menu-item .avatar { width: 36px; height: 36px; box-shadow: none; }
+.check { width: 8px; height: 14px; margin: -4px 8px 0 auto; border-right: 3px solid var(--lavender); border-bottom: 3px solid var(--lavender); transform: rotate(45deg); }
+.menu hr { border: 0; height: 2px; background: var(--bg); margin: 4px; }
+.lock-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--coral); display: grid; place-items: center; }
+.lock-icon svg { width: 16px; height: 16px; fill: #fff; stroke: #fff; }
+.brand span, .who span { display: none; }
+.avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--peach-soft); box-shadow: var(--shadow-card); }
+.avatar img { width: 100%; height: 100%; }
+.coins { display: flex; align-items: center; gap: 8px; padding: 6px 16px 6px 8px; background: var(--card); border-radius: var(--radius-pill); box-shadow: var(--shadow-card); font-weight: 700; }
+.coins img { width: 32px; height: 32px; }
+
+.tabbar {
+  position: fixed; bottom: 12px; left: 12px; right: 12px;
+  display: flex; justify-content: space-around;
+  background: var(--card); border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-card); padding: 10px 8px; z-index: 10;
+}
+.tab { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 64px; padding: 6px 12px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; color: var(--ink-soft); }
+.tab i { width: 22px; height: 22px; border-radius: 8px; background: currentColor; opacity: 0.45; }
+.tab.active { color: var(--lavender); background: var(--lavender-soft); }
+.tab.active i { opacity: 1; }
+
+.content { display: grid; grid-template-columns: 1fr; gap: 18px; }
+.hero { background: var(--lavender-soft); display: flex; align-items: center; justify-content: space-between; gap: 12px; overflow: hidden; }
+.hero .pill { margin-top: 16px; }
+.hero img { width: clamp(130px, 24vw, 280px); flex: none; margin: -24px 0; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.stat { text-align: center; padding: 16px 8px; }
+.stat b { display: block; font-size: clamp(24px, 3.4vw, 34px); }
+.stat span { font-size: 14px; color: var(--ink-soft); }
+.goal img.prize { width: 72px; height: 72px; }
+.list { display: flex; flex-direction: column; gap: 16px; }
+
+.shelf-head { display: flex; align-items: baseline; justify-content: space-between; }
+.shelf-head h2 { margin-bottom: 14px; }
+.see-all { color: var(--lavender); font-weight: 600; text-decoration: none; }
+.prizes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.prize-card { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; }
+.tile.big { width: 100%; height: 110px; margin-bottom: 6px; }
+.tile.big img { width: 72px; height: 72px; }
+.price { color: var(--ink-soft); font-size: 15px; }
+.tag { border-radius: var(--radius-pill); padding: 6px 12px; font-size: 13px; font-weight: 600; margin-top: 4px; }
+
+/* Shop */
+[hidden] { display: none !important; }
+.shop-hero { padding: 20px 24px; }
+.shop-hero img { width: clamp(90px, 14vw, 150px); margin: -10px 0; }
+.shop-hero .sub { font-size: 16px; margin-top: 8px; }
+.filters { display: flex; gap: 10px; overflow-x: auto; padding: 6px 4px 14px; margin: 0 -4px; }
+.chip { flex: none; text-decoration: none; padding: 10px 20px; border-radius: var(--radius-pill); background: var(--card); box-shadow: var(--shadow-card); color: var(--ink-soft); font-weight: 600; }
+.chip.active { background: var(--lavender); color: #fff; box-shadow: var(--shadow-press); }
+.shop-grid .tile.big { height: 140px; }
+.shop-grid .tile.big img { width: 88px; height: 88px; }
+.price { display: flex; align-items: center; gap: 6px; color: var(--ink); font-weight: 700; font-size: 18px; }
+.price img { width: 24px; height: 24px; }
+.btn { display: block; width: 100%; margin-top: auto; text-align: center; text-decoration: none; padding: 12px 18px; border-radius: var(--radius-pill); background: var(--lavender); color: #fff; font-weight: 600; box-shadow: var(--shadow-press); }
+.progress.slim { width: 100%; height: 10px; }
+.prize-card .tag { margin-top: 0; }
+.prize-card { gap: 8px; }
+.prize-card .btn { margin-top: auto; }
+
+/* Loans */
+.figures { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0; }
+.figure { background: var(--bg); border-radius: var(--radius-tile); padding: 12px 6px; text-align: center; }
+.figure b { display: block; font-size: 24px; }
+.figure span { font-size: 13px; color: var(--ink-soft); }
+.figure.owe { background: var(--peach-soft); }
+.loan-grid { display: grid; gap: 16px; }
+.loan-card .row { align-items: flex-start; }
+.loan-card { display: flex; flex-direction: column; gap: 12px; }
+.loan-card .tag { margin-top: 0; align-self: flex-start; }
+.tag.rate { background: var(--lavender-soft); color: #4a3fb0; }
+.loan-card .figures { margin: 0; }
+.paid { display: flex; justify-content: space-between; font-size: 14px; color: var(--ink-soft); }
+.paid b { color: var(--ink); }
+.see-more { margin-top: 16px; border: 0; font: inherit; font-weight: 600; cursor: pointer; }
+.note p { margin-bottom: 12px; }
+.loan-top { display: grid; gap: 18px; }
+.owed { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 4px; }
+.owed img { width: 64px; height: 64px; margin-bottom: 6px; }
+.owed b { font-size: 52px; line-height: 1; }
+.owed span { font-weight: 600; font-size: 18px; }
+.loan-card .btn { margin-top: 0; }
+.note { background: var(--sky-soft); }
+.note p { font-size: 16px; line-height: 1.5; }
+.chart { display: flex; align-items: flex-end; gap: 12px; margin: 8px 0 14px; }
+.bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; font-weight: 700; }
+.bar small { font-weight: 500; font-size: 13px; color: var(--ink-soft); }
+.bar i { display: flex; flex-direction: column; width: 100%; max-width: 64px; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-card); }
+.bar .interest { background: var(--coral); }
+.bar .base { height: 80px; background: var(--lavender); }
+.legend { display: flex; gap: 16px; font-size: 14px; margin-bottom: 12px; }
+.legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; background: var(--lavender); }
+.legend span.interest::before { background: var(--coral); }
+
+/* Parent dashboard */
+.parent { display: flex; flex-direction: column; gap: 18px; }
+.count { min-width: 26px; height: 26px; padding: 0 8px; border-radius: var(--radius-pill); background: var(--card); color: var(--ink); font-size: 14px; display: grid; place-items: center; }
+.kid-card .avatar { width: 52px; height: 52px; }
+.who .avatar.initial { font-size: 22px; }
+.menu .avatar.initial { font-size: 16px; }
+.tab { position: relative; }
+.tab .count { position: absolute; top: -4px; right: -2px; min-width: 22px; height: 22px; padding: 0 6px; font-size: 12px; background: var(--coral); color: #fff; }
+.parent-main { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.parent-main h2 { margin-bottom: -6px; }
+.p-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.btn.coral { background: var(--coral); box-shadow: var(--shadow-coral); }
+.btn.light { background: var(--card); color: var(--ink); box-shadow: var(--shadow-card); }
+.p-head .btn { width: auto; padding: 14px 28px; margin: 0; }
+.kids { display: grid; gap: 18px; }
+.kid-card { display: flex; flex-direction: column; gap: 12px; }
+.kid-card .figures { margin: 4px 0; }
+.board { display: grid; gap: 18px; align-items: start; }
+.col { border-radius: var(--radius-card); padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+.col-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px 10px 18px; border-radius: var(--radius-pill); background: var(--card); box-shadow: var(--shadow-card); font-weight: 700; }
+.col-head .count { background: var(--bg); }
+.mini { padding: 16px; border-radius: 22px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.mini .tag { margin: 0 0 2px; }
+.mini p { line-height: 1.45; }
+.mini .btn { margin-top: 8px; }
+.actions { display: flex; gap: 10px; width: 100%; margin-top: 8px; }
+.actions .btn { margin-top: 0; }
+
+/* Child detail */
+.back { color: var(--lavender); font-weight: 600; text-decoration: none; }
+.back::before { content: "< "; }
+.avatar.big { width: 72px; height: 72px; flex: none; }
+.actions-inline { display: flex; gap: 10px; flex-wrap: wrap; }
+.actions-inline .btn { width: auto; margin: 0; padding: 12px 22px; }
+.detail { display: grid; gap: 18px; }
+.detail .goal-card { display: flex; flex-direction: column; }
+.detail .goal-card .progress { margin-top: auto; }
+.detail h2 { margin-bottom: 14px; }
+.detail img.prize { width: 64px; height: 64px; }
+.rule { display: flex; justify-content: space-between; padding: 10px 0; }
+.rule span { color: var(--ink-soft); }
+.detail .rule + .btn, .detail .rule + .rule + .btn { margin-top: 8px; }
+
+/* Profile picker and PIN pad */
+body.plain .kid-bar { display: none; }
+.picker, .pin { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px; padding-top: 6vh; }
+.picker .logo { width: 80px; height: 80px; }
+.profiles { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+.profile { width: 150px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); font-weight: 600; font-size: 18px; }
+.profile small { margin-top: -10px; color: var(--ink-soft); font-size: 13px; font-weight: 500; }
+.profile .avatar, .pin .avatar { width: 88px; height: 88px; position: relative; }
+.avatar.initial { display: grid; place-items: center; background: var(--sky-soft); color: #1f4f7a; font-size: 36px; font-weight: 700; }
+.lock { position: absolute; right: -4px; bottom: -4px; width: 32px; height: 32px; border-radius: 50%; background: var(--coral); box-shadow: var(--shadow-press); display: grid; place-items: center; }
+.lock svg { width: 16px; height: 16px; fill: #fff; stroke: #fff; }
+.dots { display: flex; gap: 16px; }
+.dots i { width: 18px; height: 18px; border-radius: 50%; background: var(--card); box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1); }
+.dots i.on { background: var(--lavender); box-shadow: var(--shadow-press); }
+.keys { display: grid; grid-template-columns: repeat(3, 76px); gap: 16px; }
+.key { width: 76px; height: 76px; border: 0; border-radius: 50%; background: var(--card); box-shadow: var(--shadow-card); font: inherit; font-size: 28px; font-weight: 600; color: var(--ink); cursor: pointer; }
+.key:active { background: var(--lavender-soft); }
+.key.del { font-size: 15px; color: var(--ink-soft); }
+
+@media (min-width: 520px) {
+  .brand span, .who span { display: inline; }
+}
+
+/* Wide screens: top navigation, two-column content */
+@media (min-width: 800px) {
+  .app { padding: 28px 40px 40px; }
+  .topbar { display: grid; grid-template-columns: 1fr auto 1fr; }
+  .tabbar { position: static; padding: 6px; }
+  .tab { flex-direction: row; gap: 8px; font-size: 15px; padding: 10px 18px; }
+  .tab i { width: 18px; height: 18px; }
+  .content { grid-template-columns: 1.1fr 1fr; gap: 24px; }
+  .hero, .stats, .shelf { grid-column: 1 / -1; }
+  .prizes { grid-template-columns: repeat(4, 1fr); }
+  .shop-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .content.shop > * { grid-column: 1 / -1; }
+  .loans-active, .loan-top { grid-column: 1 / -1; }
+  .loan-top { grid-template-columns: 1fr 2fr; gap: 24px; }
+  .note { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 28px 40px; }
+  .loan-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .hero { padding: 32px 40px; }
+  .shop-hero { padding: 24px 40px; }
+  .kids { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .board { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .detail { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .detail .wide { grid-column: 1 / -1; }
+}
+</style>
+</head>
+<body>
+
+<!-- Screen 1: Kid home -->
+<div class="app" id="kid-home">
+  <div class="wrap">
+    <header class="topbar kid-bar">
+      <a class="brand" href="#home">
+        <img src="assets/piggy_head.png" alt="">
+        <span>Kiddy Bank</span>
+      </a>
+      <nav class="tabbar" aria-label="Main">
+        <a class="tab" href="#home"><i></i>Home</a>
+        <a class="tab" href="#savings"><i></i>Savings</a>
+        <a class="tab" href="#loans"><i></i>Loans</a>
+        <a class="tab" href="#shop"><i></i>Shop</a>
+      </nav>
+      <div class="account">
+        <div class="coins"><img src="assets/coin.png" alt="">120</div>
+        <button class="who" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="profile-menu">
+          <span>Theo</span>
+          <div class="avatar"><img src="assets/kid-boy.png" alt=""></div>
+          <i class="chev"></i>
+        </button>
+        <div class="card menu" id="profile-menu" role="menu" hidden>
+          <div class="menu-item current" role="menuitem" aria-current="true">
+            <div class="avatar"><img src="assets/kid-boy.png" alt=""></div>Theo<i class="check"></i>
+          </div>
+          <a class="menu-item" role="menuitem" href="#pin" data-who="nia">
+            <div class="avatar"><img src="assets/kid-girl.png" alt=""></div>Nia
+          </a>
+          <hr>
+          <a class="menu-item" role="menuitem" href="#pin" data-who="parent">
+            <span class="lock-icon"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5 7V5a3 3 0 0 1 6 0v2" fill="none" stroke-width="2"/></svg></span>Parent view
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="content" data-screen="home">
+      <section class="card hero">
+        <div>
+          <h1>Welcome back, Theo!</h1>
+          <a class="pill" href="#shop">Browse the shop</a>
+        </div>
+        <img src="assets/piggy_happy_coins.png" alt="Happy piggy bank with coins">
+      </section>
+
+      <section class="stats">
+        <div class="card stat"><b>120</b><span>Balance</span></div>
+        <div class="card stat"><b>45</b><span>Saved</span></div>
+        <div class="card stat"><b>44</b><span>Owed</span></div>
+      </section>
+
+      <section class="card goal">
+        <h2>My next prize</h2>
+        <div class="row">
+          <img class="prize" src="assets/prize-rocket.png" alt="">
+          <div class="grow">
+            <div class="title">Toy Rocket</div>
+            <div class="sub">45 of 200 bucks</div>
+          </div>
+        </div>
+        <div class="progress" style="margin-top:16px"><span style="width:22.5%"></span></div>
+      </section>
+
+      <section class="card">
+        <h2>Recent</h2>
+        <div class="list">
+          <div class="row">
+            <div class="tile" style="background:var(--mint-soft)"><img src="assets/star.png" alt=""></div>
+            <div class="grow"><div class="title">Cleaned my room</div><div class="sub">+10 bucks, today</div></div>
+            <div class="arrow"></div>
+          </div>
+          <div class="row">
+            <div class="tile" style="background:var(--yellow-soft)"><img src="assets/trophy.png" alt=""></div>
+            <div class="grow"><div class="title">Reading streak bonus</div><div class="sub">+5 bucks, yesterday</div></div>
+            <div class="arrow"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="shelf">
+        <div class="shelf-head">
+          <h2>Prizes for you</h2>
+          <a class="see-all" href="#shop">See all</a>
+        </div>
+        <div class="prizes">
+          <div class="card prize-card">
+            <div class="tile big" style="background:var(--peach-soft)"><img src="assets/prize-teddy.png" alt=""></div>
+            <div class="title">Teddy Bear</div>
+            <div class="price">60 bucks</div>
+            <span class="tag" style="background:var(--mint-soft)">You can get it</span>
+          </div>
+          <div class="card prize-card">
+            <div class="tile big" style="background:var(--sky-soft)"><img src="assets/prize-ball.png" alt=""></div>
+            <div class="title">Soccer Ball</div>
+            <div class="price">80 bucks</div>
+            <span class="tag" style="background:var(--mint-soft)">You can get it</span>
+          </div>
+          <div class="card prize-card">
+            <div class="tile big" style="background:var(--lavender-soft)"><img src="assets/prize-game.png" alt=""></div>
+            <div class="title">Game Controller</div>
+            <div class="price">150 bucks</div>
+            <span class="tag" style="background:var(--yellow-soft)">30 more to go</span>
+          </div>
+          <div class="card prize-card">
+            <div class="tile big" style="background:var(--mint-soft)"><img src="assets/prize-books.png" alt=""></div>
+            <div class="title">Story Books</div>
+            <div class="price">40 bucks</div>
+            <span class="tag" style="background:var(--mint-soft)">You can get it</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Screen 2: Kid shop -->
+    <main class="content shop" data-screen="shop" hidden>
+      <section class="card hero shop-hero">
+        <div>
+          <h1>Prize Shop</h1>
+          <p class="sub">You have 120 bucks. Pick something you love.</p>
+        </div>
+        <img src="assets/piggy_happy.png" alt="Happy piggy bank">
+      </section>
+
+      <div class="filters" role="group" aria-label="Categories">
+        <a class="chip active" href="#shop">All</a>
+        <a class="chip" href="#shop">Toys</a>
+        <a class="chip" href="#shop">Games</a>
+        <a class="chip" href="#shop">Sports</a>
+        <a class="chip" href="#shop">Books</a>
+        <a class="chip" href="#shop">Surprises</a>
+      </div>
+
+      <section class="prizes shop-grid">
+        <div class="card prize-card">
+          <div class="tile big" style="background:var(--peach-soft)"><img src="assets/prize-teddy.png" alt=""></div>
+          <div class="title">Teddy Bear</div>
+          <div class="price"><img src="assets/coin.png" alt="">60</div>
+          <a class="btn" href="#shop">Get it</a>
+        </div>
+        <div class="card prize-card">
+          <div class="tile big" style="background:var(--lavender-soft)"><img src="assets/prize-rocket.png" alt=""></div>
+          <div class="title">Toy Rocket</div>
+          <div class="price"><img src="assets/coin.png" alt="">200</div>
+          <span class="tag" style="background:var(--yellow-soft)">My goal</span>
+          <div class="progress slim"><span style="width:22.5%"></span></div>
+          <div class="sub">45 of 200 saved</div>
+          <a class="btn" href="#shop">Add bucks</a>
+        </div>
+        <div class="card prize-card">
+          <div class="tile big" style="background:var(--sky-soft)"><img src="assets/prize-ball.png" alt=""></div>
+          <div class="title">Soccer Ball</div>
+          <div class="price"><img src="assets/coin.png" alt="">80</div>
+          <a class="btn" href="#shop">Get it</a>
+        </div>
+        <div class="card prize-card">
+          <div class="tile big" style="background:var(--mint-soft)"><img src="assets/prize-books.png" alt=""></div>
+          <div class="title">Story Books</div>
+          <div class="price"><img src="assets/coin.png" alt="">40</div>
+          <a class="btn" href="#shop">Get it</a>
+        </div>
+        <div class="card prize-card">
+          <div class="tile big" style="background:var(--yellow-soft)"><img src="assets/prize-gift.png" alt=""></div>
+          <div class="title">Mystery Gift</div>
+          <div class="price"><img src="assets/coin.png" alt="">30</div>
+          <a class="btn" href="#shop">Get it</a>
+        </div>
+        <div class="card prize-card">
+          <div class="tile big" style="background:var(--lavender-soft)"><img src="assets/prize-game.png" alt=""></div>
+          <div class="title">Game Controller</div>
+          <div class="price"><img src="assets/coin.png" alt="">150</div>
+          <div class="sub">30 more to go</div>
+          <a class="btn" href="#shop">Save up</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- Screen 3: Kid loans -->
+    <main class="content loans" data-screen="loans" hidden>
+      <section class="card hero shop-hero">
+        <div>
+          <h1>My Loans</h1>
+          <a class="pill" href="#loans">Ask to borrow</a>
+        </div>
+        <img src="assets/piggy_logo.png" alt="Piggy bank with a coin dropping in">
+      </section>
+
+      <div class="loan-top">
+      <section class="card owed">
+        <img src="assets/coin.png" alt="">
+        <b>44</b>
+        <span>Total owed</span>
+        <p class="sub">Across 3 loans</p>
+      </section>
+      <section class="card note">
+        <div>
+          <h2>How loans work</h2>
+          <p>A grown-up sets the interest rate. At the end of each week you pay interest on what you still owe. At 10% a week, borrowing 10 bucks grows by 1 kiddy buck each week. Pay some back and the interest gets smaller.</p>
+          <div class="legend"><span>Borrowed</span><span class="interest">Interest</span></div>
+          <p><b>Pay back sooner, pay less interest.</b></p>
+        </div>
+        <div class="chart">
+          <div class="bar">10<i><span class="base"></span></i><small>Now</small></div>
+          <div class="bar">11<i><span class="interest" style="height:10px"></span><span class="base"></span></i><small>1 week</small></div>
+          <div class="bar">12<i><span class="interest" style="height:20px"></span><span class="base"></span></i><small>2 weeks</small></div>
+          <div class="bar">13<i><span class="interest" style="height:30px"></span><span class="base"></span></i><small>3 weeks</small></div>
+        </div>
+      </section>
+      </div>
+
+      <section class="loans-active">
+        <div class="shelf-head">
+          <h2>Active loans</h2>
+        </div>
+        <div class="loan-grid">
+          <div class="card loan-card">
+            <div class="row">
+              <div class="tile" style="background:var(--sky-soft)"><img src="assets/prize-ball.png" alt=""></div>
+              <div class="grow">
+                <div class="title">Soccer Ball</div>
+                <div class="sub">Borrowed 2 weeks ago</div>
+              </div>
+            </div>
+            <span class="tag rate">Interest: 10% a week. This week: 2 bucks</span>
+            <div class="figures">
+              <div class="figure"><b>20</b><span>Borrowed</span></div>
+              <div class="figure"><b>+4</b><span>Interest</span></div>
+              <div class="figure owe"><b>24</b><span>Total</span></div>
+            </div>
+            <div class="progress slim"><span style="width:16.7%"></span></div>
+            <div class="paid"><span>4 paid back</span><b>20 left to pay</b></div>
+            <a class="btn" href="#loans">Pay back</a>
+          </div>
+          <div class="card loan-card">
+            <div class="row">
+              <div class="tile" style="background:var(--peach-soft)"><img src="assets/prize-teddy.png" alt=""></div>
+              <div class="grow">
+                <div class="title">Teddy Bear</div>
+                <div class="sub">Borrowed 3 weeks ago</div>
+              </div>
+            </div>
+            <span class="tag rate">Interest: 10% a week. This week: 1 buck</span>
+            <div class="figures">
+              <div class="figure"><b>15</b><span>Borrowed</span></div>
+              <div class="figure"><b>+4</b><span>Interest</span></div>
+              <div class="figure owe"><b>19</b><span>Total</span></div>
+            </div>
+            <div class="progress slim"><span style="width:31.6%"></span></div>
+            <div class="paid"><span>6 paid back</span><b>13 left to pay</b></div>
+            <a class="btn" href="#loans">Pay back</a>
+          </div>
+          <div class="card loan-card more" hidden>
+            <div class="row">
+              <div class="tile" style="background:var(--yellow-soft)"><img src="assets/prize-gift.png" alt=""></div>
+              <div class="grow">
+                <div class="title">Mystery Gift</div>
+                <div class="sub">Borrowed 1 week ago</div>
+              </div>
+            </div>
+            <span class="tag rate">Interest: 10% a week. This week: 1 buck</span>
+            <div class="figures">
+              <div class="figure"><b>10</b><span>Borrowed</span></div>
+              <div class="figure"><b>+1</b><span>Interest</span></div>
+              <div class="figure owe"><b>11</b><span>Total</span></div>
+            </div>
+            <div class="progress slim"><span style="width:0%"></span></div>
+            <div class="paid"><span>0 paid back</span><b>11 left to pay</b></div>
+            <a class="btn" href="#loans">Pay back</a>
+          </div>
+        </div>
+        <button class="chip see-more" type="button" onclick="document.querySelectorAll('.loan-card.more').forEach(c => c.hidden = false); this.hidden = true;">See 1 more loan</button>
+      </section>
+
+      <section class="card">
+        <h2>Loan requests</h2>
+        <div class="row">
+          <div class="tile" style="background:var(--lavender-soft)"><img src="assets/prize-game.png" alt=""></div>
+          <div class="grow"><div class="title">Game Controller</div><div class="sub">Asked for 30 bucks</div></div>
+          <span class="tag" style="background:var(--yellow-soft)">Waiting</span>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Paid off</h2>
+        <div class="row">
+          <div class="tile" style="background:var(--mint-soft)"><img src="assets/prize-books.png" alt=""></div>
+          <div class="grow"><div class="title">Story Books</div><div class="sub">Borrowed 20, paid back 22 in 1 week</div></div>
+          <span class="tag" style="background:var(--mint-soft)">Paid off</span>
+        </div>
+      </section>
+    </main>
+
+    <!-- Profile picker: shared device, reached from the avatar -->
+    <main class="picker" data-screen="profiles" hidden>
+      <img class="logo" src="assets/piggy_head.png" alt="">
+      <h1>Who is using Kiddy Bank?</h1>
+      <div class="profiles">
+        <a class="card profile" href="#pin" data-who="theo">
+          <div class="avatar"><img src="assets/kid-boy.png" alt=""></div>Theo
+        </a>
+        <a class="card profile" href="#pin" data-who="nia">
+          <div class="avatar"><img src="assets/kid-girl.png" alt=""></div>Nia
+        </a>
+        <a class="card profile" href="#pin" data-who="parent">
+          <div class="avatar initial">S<span class="lock"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5 7V5a3 3 0 0 1 6 0v2" fill="none" stroke-width="2"/></svg></span></div>Sam<small>Grown-up</small>
+        </a>
+      </div>
+    </main>
+
+    <!-- PIN pad: kid PIN or parent PIN -->
+    <main class="pin" data-screen="pin" hidden>
+      <div class="avatar" id="pin-avatar"></div>
+      <h1 id="pin-title">Enter your PIN</h1>
+      <div class="dots" id="pin-dots"><i></i><i></i><i></i><i></i></div>
+      <div class="keys">
+        <button class="key" type="button">1</button><button class="key" type="button">2</button><button class="key" type="button">3</button>
+        <button class="key" type="button">4</button><button class="key" type="button">5</button><button class="key" type="button">6</button>
+        <button class="key" type="button">7</button><button class="key" type="button">8</button><button class="key" type="button">9</button>
+        <span></span><button class="key" type="button">0</button><button class="key del" type="button">Delete</button>
+      </div>
+      <a class="see-all" id="pin-forgot" href="#pin">Forgot PIN? Use your password</a>
+      <a class="see-all" href="#home">Cancel</a>
+    </main>
+
+    <!-- Screen 4: Parent dashboard -->
+    <main class="parent" data-screen="parent parent-theo" hidden>
+      <header class="topbar">
+        <a class="brand" href="#parent">
+          <img src="assets/piggy_head.png" alt="">
+          <span>Kiddy Bank</span>
+        </a>
+        <nav class="tabbar" aria-label="Parent">
+          <a class="tab" href="#parent"><i></i>Dashboard</a>
+          <a class="tab" href="#parent-loans"><i></i>Loans<b class="count">1</b></a>
+          <a class="tab" href="#parent-shop"><i></i>Shop</a>
+          <a class="tab" href="#parent-settings"><i></i>Settings</a>
+        </nav>
+        <div class="account">
+          <button class="who" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="parent-menu">
+            <span>Sam</span>
+            <div class="avatar initial">S</div>
+            <i class="chev"></i>
+          </button>
+          <div class="card menu" id="parent-menu" role="menu" hidden>
+            <div class="menu-item current" role="menuitem" aria-current="true">
+              <div class="avatar initial">S</div>Sam<i class="check"></i>
+            </div>
+            <a class="menu-item" role="menuitem" href="#pin" data-who="theo">
+              <div class="avatar"><img src="assets/kid-boy.png" alt=""></div>Theo
+            </a>
+            <a class="menu-item" role="menuitem" href="#pin" data-who="nia">
+              <div class="avatar"><img src="assets/kid-girl.png" alt=""></div>Nia
+            </a>
+            <hr>
+            <a class="menu-item" role="menuitem" href="#profiles">
+              <span class="lock-icon"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5 7V5a3 3 0 0 1 6 0v2" fill="none" stroke-width="2"/></svg></span>Lock and exit
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <div class="parent-main" data-screen="parent">
+        <header class="p-head">
+          <div>
+            <h1>Hi, Sam</h1>
+            <p class="sub">Here is how your kids are doing.</p>
+          </div>
+          <a class="btn coral" href="#parent">Award bucks</a>
+        </header>
+
+        <section class="kids">
+          <div class="card kid-card">
+            <div class="row">
+              <div class="avatar"><img src="assets/kid-boy.png" alt=""></div>
+              <div class="grow"><div class="title">Theo</div><div class="sub">3 active loans</div></div>
+              <a class="arrow" href="#parent-theo" aria-label="View Theo"></a>
+            </div>
+            <div class="figures">
+              <div class="figure"><b>120</b><span>Balance</span></div>
+              <div class="figure"><b>45</b><span>Saved</span></div>
+              <div class="figure owe"><b>44</b><span>Owed</span></div>
+            </div>
+            <div class="paid"><span>Goal: Toy Rocket</span><b>45 of 200</b></div>
+            <div class="progress slim"><span style="width:22.5%"></span></div>
+          </div>
+          <div class="card kid-card">
+            <div class="row">
+              <div class="avatar"><img src="assets/kid-girl.png" alt=""></div>
+              <div class="grow"><div class="title">Nia</div><div class="sub">No loans</div></div>
+              <a class="arrow" href="#parent" aria-label="View Nia"></a>
+            </div>
+            <div class="figures">
+              <div class="figure"><b>75</b><span>Balance</span></div>
+              <div class="figure"><b>30</b><span>Saved</span></div>
+              <div class="figure owe"><b>0</b><span>Owed</span></div>
+            </div>
+            <div class="paid"><span>Goal: Soccer Ball</span><b>30 of 80</b></div>
+            <div class="progress slim"><span style="width:37.5%"></span></div>
+          </div>
+        </section>
+
+        <h2>To do</h2>
+        <section class="board">
+          <div class="col" style="background:var(--lavender-soft)">
+            <div class="col-head">Loan requests<b class="count">1</b></div>
+            <div class="card mini">
+              <span class="tag" style="background:var(--lavender-soft)">Theo</span>
+              <div class="title">Game Controller</div>
+              <div class="sub">Asks to borrow 30 bucks at 10% a week</div>
+              <div class="actions"><a class="btn coral" href="#parent">Approve</a><a class="btn light" href="#parent">Deny</a></div>
+            </div>
+          </div>
+          <div class="col" style="background:var(--peach-soft)">
+            <div class="col-head">Prizes to hand over<b class="count">2</b></div>
+            <div class="card mini">
+              <span class="tag" style="background:var(--peach-soft)">Nia</span>
+              <div class="title">Story Books</div>
+              <div class="sub">Bought today for 40 bucks</div>
+              <a class="btn coral" href="#parent">Mark as given</a>
+            </div>
+            <div class="card mini">
+              <span class="tag" style="background:var(--peach-soft)">Nia</span>
+              <div class="title">Mystery Gift</div>
+              <div class="sub">Bought yesterday for 30 bucks</div>
+              <a class="btn coral" href="#parent">Mark as given</a>
+            </div>
+          </div>
+          <div class="col" style="background:var(--mint-soft)">
+            <div class="col-head">Talk about it<b class="count">3</b></div>
+            <div class="card mini">
+              <span class="tag" style="background:var(--mint-soft)">Theo</span>
+              <p>Theo has 3 loans open. Ask about a plan to pay them back.</p>
+            </div>
+            <div class="card mini">
+              <span class="tag" style="background:var(--mint-soft)">Theo</span>
+              <p>Theo paid off the Story Books loan in 1 week. Say well done.</p>
+            </div>
+            <div class="card mini">
+              <span class="tag" style="background:var(--mint-soft)">Nia</span>
+              <p>Nia is 50 bucks away from the Soccer Ball. Ask what makes it worth saving for.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="parent-main" data-screen="parent-theo" hidden>
+        <a class="back" href="#parent">All kids</a>
+        <header class="p-head">
+          <div class="row">
+            <div class="avatar big"><img src="assets/kid-boy.png" alt=""></div>
+            <div>
+              <h1>Theo</h1>
+              <p class="sub">3 active loans, saving for the Toy Rocket</p>
+            </div>
+          </div>
+          <div class="actions-inline">
+            <a class="btn coral" href="#parent-theo">Award bucks</a>
+            <a class="btn light" href="#parent-theo">Deduct bucks</a>
+          </div>
+        </header>
+
+        <section class="stats">
+          <div class="card stat"><b>120</b><span>Balance</span></div>
+          <div class="card stat"><b>45</b><span>Saved</span></div>
+          <div class="card stat"><b>44</b><span>Owed</span></div>
+        </section>
+
+        <div class="detail">
+          <section class="card goal-card">
+            <h2>Goal</h2>
+            <div class="row">
+              <img class="prize" src="assets/prize-rocket.png" alt="" width="64" height="64">
+              <div class="grow"><div class="title">Toy Rocket</div><div class="sub">45 of 200 bucks</div></div>
+            </div>
+            <div class="progress"><span style="width:22.5%"></span></div>
+          </section>
+
+          <section class="card">
+            <h2>Loan rules</h2>
+            <div class="rule"><span>Interest rate</span><b>10% a week</b></div>
+            <div class="rule"><span>Loan limit</span><b>100 bucks</b></div>
+            <a class="btn light" href="#parent-theo">Change rules</a>
+          </section>
+
+          <section class="card wide">
+            <h2>Loans</h2>
+            <div class="list">
+              <div class="row">
+                <div class="tile" style="background:var(--lavender-soft)"><img src="assets/prize-game.png" alt=""></div>
+                <div class="grow"><div class="title">Game Controller</div><div class="sub">Asks to borrow 30 bucks at 10% a week</div></div>
+                <div class="actions-inline"><a class="btn coral" href="#parent-theo">Approve</a><a class="btn light" href="#parent-theo">Deny</a></div>
+              </div>
+              <div class="row">
+                <div class="tile" style="background:var(--peach-soft)"><img src="assets/prize-ball.png" alt=""></div>
+                <div class="grow"><div class="title">Soccer Ball</div><div class="sub">20 left to pay</div></div>
+                <span class="tag rate">10% a week</span>
+              </div>
+              <div class="row">
+                <div class="tile" style="background:var(--peach-soft)"><img src="assets/prize-teddy.png" alt=""></div>
+                <div class="grow"><div class="title">Teddy Bear</div><div class="sub">13 left to pay</div></div>
+                <span class="tag rate">10% a week</span>
+              </div>
+              <div class="row">
+                <div class="tile" style="background:var(--peach-soft)"><img src="assets/prize-gift.png" alt=""></div>
+                <div class="grow"><div class="title">Mystery Gift</div><div class="sub">11 left to pay</div></div>
+                <span class="tag rate">10% a week</span>
+              </div>
+              <div class="row">
+                <div class="tile" style="background:var(--mint-soft)"><img src="assets/prize-books.png" alt=""></div>
+                <div class="grow"><div class="title">Story Books</div><div class="sub">Paid off: borrowed 20, paid 22 in 1 week</div></div>
+                <span class="tag" style="background:var(--mint-soft)">Paid off</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="card wide">
+            <h2>Recent activity</h2>
+            <div class="list">
+              <div class="row">
+                <div class="tile" style="background:var(--mint-soft)"><img src="assets/star.png" alt=""></div>
+                <div class="grow"><div class="title">Cleaned my room</div><div class="sub">Today</div></div>
+                <b>+10</b>
+              </div>
+              <div class="row">
+                <div class="tile" style="background:var(--yellow-soft)"><img src="assets/trophy.png" alt=""></div>
+                <div class="grow"><div class="title">Reading streak bonus</div><div class="sub">Yesterday</div></div>
+                <b>+5</b>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* Show the screen named by the URL hash; default to home. */
+const screens = [...document.querySelectorAll("[data-screen]")];
+const tabs = [...document.querySelectorAll(".tab")];
+const plainScreens = ["profiles", "pin", "parent", "parent-theo"];
+const names = s => s.dataset.screen.split(" ");
+
+function show() {
+  const name = location.hash.slice(1);
+  const fallback = name.startsWith("parent") ? "parent" : "home";
+  const current = screens.some(s => names(s).includes(name)) ? name : fallback;
+  screens.forEach(s => { s.hidden = !names(s).includes(current); });
+  document.body.classList.toggle("plain", plainScreens.includes(current));
+  const tabName = current === "parent-theo" ? "parent" : current;
+  tabs.forEach(t => {
+    const on = t.getAttribute("href") === "#" + tabName;
+    t.classList.toggle("active", on);
+    on ? t.setAttribute("aria-current", "page") : t.removeAttribute("aria-current");
+  });
+  window.scrollTo(0, 0);
+}
+addEventListener("hashchange", show);
+show();
+
+/* PIN pad demo: any 4 digits unlock. The real app checks the PIN in an edge function. */
+const people = {
+  theo: { title: "Hi Theo, enter your PIN", avatar: '<img src="assets/kid-boy.png" alt="">', next: "#home", parent: false },
+  nia: { title: "Hi Nia, enter your PIN", avatar: '<img src="assets/kid-girl.png" alt="">', next: "#home", parent: false },
+  parent: { title: "Enter your parent PIN", avatar: "S", next: "#parent", parent: true }
+};
+let who = people.parent;
+let digits = "";
+const dots = [...document.querySelectorAll("#pin-dots i")];
+
+function pickPerson(key) {
+  who = people[key];
+  digits = "";
+  const avatar = document.getElementById("pin-avatar");
+  avatar.innerHTML = who.avatar;
+  avatar.classList.toggle("initial", who.parent);
+  document.getElementById("pin-title").textContent = who.title;
+  document.getElementById("pin-forgot").hidden = !who.parent;
+  drawDots();
+}
+
+function drawDots() {
+  dots.forEach((d, i) => d.classList.toggle("on", i < digits.length));
+}
+
+function pressKey(key) {
+  digits = key.classList.contains("del") ? digits.slice(0, -1) : (digits + key.textContent).slice(0, 4);
+  drawDots();
+  if (digits.length === 4) setTimeout(() => { location.hash = who.next; }, 250);
+}
+
+/* Profile menus: open from an avatar chip, close on outside click, Escape, or navigation. */
+const menuButtons = [...document.querySelectorAll("button.who")];
+
+function setMenu(button, open) {
+  document.getElementById(button.getAttribute("aria-controls")).hidden = !open;
+  button.setAttribute("aria-expanded", open);
+}
+function closeMenus() {
+  menuButtons.forEach(b => setMenu(b, false));
+}
+menuButtons.forEach(b => b.addEventListener("click", e => {
+  e.stopPropagation();
+  const open = b.getAttribute("aria-expanded") !== "true";
+  closeMenus();
+  setMenu(b, open);
+}));
+document.addEventListener("click", e => { if (!e.target.closest(".menu")) closeMenus(); });
+addEventListener("keydown", e => { if (e.key === "Escape") closeMenus(); });
+addEventListener("hashchange", closeMenus);
+
+document.querySelectorAll("[data-who]").forEach(a => a.addEventListener("click", () => pickPerson(a.dataset.who)));
+document.querySelectorAll(".key").forEach(k => k.addEventListener("click", () => pressKey(k)));
+pickPerson("parent");
+</script>
+</body>
+</html>
