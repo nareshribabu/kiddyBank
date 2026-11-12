@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { expect, it } from 'vitest'
 import App from '../App'
 
-it('renders the app title', () => {
+it('renders the showcase title', () => {
   render(<App />)
-  expect(screen.getByRole('heading', { name: 'Kiddy Bank' })).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: 'Kiddy Bank design system' })).toBeInTheDocument()
 })
